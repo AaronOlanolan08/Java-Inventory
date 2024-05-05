@@ -51,9 +51,8 @@ public class Supplier {
 
     public void addFunction(SupplierDT supplierDTO) {
         try {
-            String query = "INSERT INTO suppliers VALUES(null,?,?,?,?)";
+            String query = "INSERT INTO suppliers VALUES(null,?,?,?)";
             prepStatement = conn.prepareStatement(query);
-            prepStatement.setString(1, supplierDTO.getSuppCode());
             prepStatement.setString(2, supplierDTO.getFullName());
             prepStatement.setString(3, supplierDTO.getLocation());
             prepStatement.setString(4, supplierDTO.getPhone());
@@ -67,12 +66,13 @@ public class Supplier {
     // Method to edit existing suppleir details
     public void editSupplierDAO(SupplierDT supplierDTO) {
         try {
-            String query = "UPDATE suppliers SET fullname=?,location=?,mobile=? WHERE suppliercode=?";
+            String query = "UPDATE suppliers SET fullname=?,location=?,mobile=? WHERE supplierID=?";
+            
             prepStatement = conn.prepareStatement(query);
             prepStatement.setString(1, supplierDTO.getFullName());
             prepStatement.setString(2, supplierDTO.getLocation());
             prepStatement.setString(3, supplierDTO.getPhone());
-            prepStatement.setString(4, supplierDTO.getSuppCode());
+            prepStatement.setString(4, String.valueOf(supplierDTO.getSuppID()));
             prepStatement.executeUpdate();
             JOptionPane.showMessageDialog(null, "Supplier details have been updated.");
         } catch (SQLException e) {
@@ -94,7 +94,7 @@ public class Supplier {
     // Supplier data set retrieval method
     public ResultSet getQueryResult() {
         try {
-            String query = "SELECT supplierID, fullname, location, mobile FROM suppliers";
+            String query = "SELECT supplierID, fullname, location, contact FROM suppliers";
             resultSet = statement.executeQuery(query);
         } catch (Exception e) {
             e.printStackTrace();

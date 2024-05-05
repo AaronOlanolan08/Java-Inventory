@@ -37,9 +37,9 @@ public class Home extends javax.swing.JFrame {
         displayPanel.setLayout(layout);
         displayPanel.add("Home", new Welcome(username));
         displayPanel.add("Users", new UsersFrame());
-        displayPanel.add("Customers", new CustomersFrame());
-//        displayPanel.add("Products", new ProductPage(username, this));
-//        displayPanel.add("Suppliers", new SupplierPage());
+//        displayPanel.add("Customers", new CustomersFrame());
+        displayPanel.add("Products", new ProductsFrame());
+        displayPanel.add("Suppliers", new SuppliersFrame());
 //        displayPanel.add("Current Stock", new CurrentStockPage(username));
 //        displayPanel.add("Sales", new SalesPage(username, this));
 //        displayPanel.add("Purchase", new PurchasePage(this));
@@ -51,7 +51,7 @@ public class Home extends javax.swing.JFrame {
                 outTime = LocalDateTime.now();
                 user.setOutTime(String.valueOf(outTime));
                 user.setUsername(username);
-                new Users().addUserLogin(user);
+//                new Users().addUserLogin(user);
                 super.windowClosing(e);
             }
         });
@@ -61,11 +61,11 @@ public class Home extends javax.swing.JFrame {
     }
 
     // Methods to display different sections in the mainframe
-    public void addHomePage() {
+    public void addHomeFrame() {
         layout.show(displayPanel, "Home");
     }
 
-    public void addUsersPage() {
+    public void addUsersFrame() {
         layout.show(displayPanel, "Users");
     }
 
@@ -73,11 +73,11 @@ public class Home extends javax.swing.JFrame {
         layout.show(displayPanel, "Customers");
     }
 
-    public void addProdPage() {
+    public void addProdFrame() {
         layout.show(displayPanel, "Products");
     }
 
-    public void addSuppPage() {
+    public void addSuppFrame() {
         layout.show(displayPanel, "Suppliers");
     }
 
@@ -106,11 +106,14 @@ public class Home extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         menuPanel = new javax.swing.JPanel();
         usersButton = new javax.swing.JButton();
         homeButton = new javax.swing.JButton();
+        suppButton = new javax.swing.JButton();
+        prodButton = new javax.swing.JButton();
         displayPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -140,28 +143,48 @@ public class Home extends javax.swing.JFrame {
             }
         });
 
+        suppButton.setText("Suppliers");
+        suppButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                suppButtonActionPerformed(evt);
+            }
+        });
+
+        prodButton.setText("Products");
+        prodButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                prodButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout menuPanelLayout = new javax.swing.GroupLayout(menuPanel);
         menuPanel.setLayout(menuPanelLayout);
         menuPanelLayout.setHorizontalGroup(
             menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(menuPanelLayout.createSequentialGroup()
+                .addGap(24, 24, 24)
                 .addGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(prodButton)
+                        .addComponent(suppButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(homeButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(menuPanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(usersButton))
-                    .addGroup(menuPanelLayout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(homeButton)))
-                .addContainerGap(42, Short.MAX_VALUE))
+                        .addGap(1, 1, 1)
+                        .addComponent(usersButton, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
         menuPanelLayout.setVerticalGroup(
             menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menuPanelLayout.createSequentialGroup()
-                .addGap(32, 32, 32)
+                .addGap(58, 58, 58)
                 .addComponent(homeButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(36, 36, 36)
+                .addComponent(suppButton)
+                .addGap(38, 38, 38)
+                .addComponent(prodButton)
+                .addGap(36, 36, 36)
                 .addComponent(usersButton)
-                .addGap(85, 85, 85))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout displayPanelLayout = new javax.swing.GroupLayout(displayPanel);
@@ -221,20 +244,31 @@ public class Home extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void usersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usersButtonActionPerformed
-        addUsersPage();
+        addUsersFrame();
     }//GEN-LAST:event_usersButtonActionPerformed
 
     private void homeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeButtonActionPerformed
-        addHomePage();
+        addHomeFrame();
     }//GEN-LAST:event_homeButtonActionPerformed
+
+    private void suppButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_suppButtonActionPerformed
+        addSuppFrame();
+    }//GEN-LAST:event_suppButtonActionPerformed
+
+    private void prodButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prodButtonActionPerformed
+       addProdFrame();
+    }//GEN-LAST:event_prodButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JPanel displayPanel;
     private javax.swing.JButton homeButton;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel menuPanel;
+    private javax.swing.JButton prodButton;
+    private javax.swing.JButton suppButton;
     private javax.swing.JButton usersButton;
     // End of variables declaration//GEN-END:variables
 }

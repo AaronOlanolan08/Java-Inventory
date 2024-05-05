@@ -403,7 +403,7 @@ public class Prod {
     // Products data set retrieval for display
     public ResultSet getQueryResult() {
         try {
-            String query = "SELECT productcode,productname,costprice,sellprice,brand FROM products ORDER BY pid";
+            String query = "SELECT productname,costprice,sellprice,brand,stocks FROM products ORDER BY productID";
             resultSet = statement.executeQuery(query);
         } catch (SQLException throwables) {
             throwables.printStackTrace();

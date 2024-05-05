@@ -143,41 +143,40 @@ public class Users {
         }
     }
 
-    public ResultSet getUserLogsDAO() {
-        try {
-            String query = "SELECT users.name,userlogs.username,in_time,out_time,location FROM userlogs"
-                    + " INNER JOIN users on userlogs.username=users.username";
-            resultSet = statement.executeQuery(query);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return resultSet;
-    }
+//    public ResultSet getUserLogsDAO() {
+//        try {
+//            String query = "SELECT users.name,userlogs.username,in_time,out_time,location FROM userlogs"
+//                    + " INNER JOIN users on userlogs.username=users.username";
+//            resultSet = statement.executeQuery(query);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return resultSet;
+//    }
 
-    public void addUserLogin(UsersDT userDTO) {
-        try {
-            // Query to insert a row into the userlogs table
-            String query = "INSERT INTO userlogs (id, username, in_time, out_time) VALUES (?, ?, ?, ?)";
-            PreparedStatement prepStatement = conn.prepareStatement(query);
-
-            // Assuming getUserID() returns the user ID from the users table
-            int userID = getUserID(String.valueOf(userDTO.getUsername()));
-
-            // Set the user ID obtained from UsersDT object
-            prepStatement.setInt(1, userID);
-            prepStatement.setString(2, userDTO.getUsername()); // Assuming getUsername() returns the username
-            prepStatement.setString(3, userDTO.getInTime());
-            prepStatement.setString(4, userDTO.getOutTime());
-
-            prepStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+//    public void addUserLogin(UsersDT userDTO) {
+//        try {
+//            // Query to insert a row into the userlogs table
+//            String query = "INSERT INTO userlogs (id, in_time, out_time) VALUES (?, ?, ?, ?)";
+//            PreparedStatement prepStatement = conn.prepareStatement(query);
+//
+//            // Assuming getUserID() returns the user ID from the users table
+//            int userID = getUserID(String.valueOf(userDTO.getUsername()));
+//
+//            // Set the user ID obtained from UsersDT object
+//            prepStatement.setInt(1, userID);
+//            prepStatement.setString(3, userDTO.getInTime());
+//            prepStatement.setString(4, userDTO.getOutTime());
+//
+//            prepStatement.executeUpdate();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public int getUserID(String username) {
         int userID = -1; // Default value if no user is found or error occurs
-        String query = "SELECT id FROM users WHERE username = ?";
+        String query = "SELECT userID FROM users WHERE username = ?";
         try (PreparedStatement prepStatement = conn.prepareStatement(query)) {
             prepStatement.setString(1, username);
 
