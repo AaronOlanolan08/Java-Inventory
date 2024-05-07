@@ -66,7 +66,7 @@ public class Supplier {
     // Method to edit existing suppleir details
     public void editSupplierDAO(SupplierDT supplierDTO) {
         try {
-            String query = "UPDATE suppliers SET fullname=?,location=?,mobile=? WHERE supplierID=?";
+            String query = "UPDATE suppliers SET fullname=?,location=?,contact=? WHERE supplierID=?";
             
             prepStatement = conn.prepareStatement(query);
             prepStatement.setString(1, supplierDTO.getFullName());
@@ -81,9 +81,9 @@ public class Supplier {
     }
 
     // Method to delete existing supplier
-    public void deleteSupplierDAO(String suppCode) {
+    public void deleteSupplierDAO(int suppID) {
         try {
-            String query = "DELETE FROM suppliers WHERE suppliercode='" + suppCode + "'";
+            String query = "DELETE FROM suppliers WHERE supplierID='" + suppID + "'";
             statement.executeUpdate(query);
             JOptionPane.showMessageDialog(null, "Supplier has been removed.");
         } catch (SQLException e) {
