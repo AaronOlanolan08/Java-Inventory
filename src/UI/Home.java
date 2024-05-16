@@ -10,6 +10,7 @@ import Database.DatabaseHandler;
 
 import javax.swing.*;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.time.LocalDateTime;
@@ -25,22 +26,20 @@ public class Home extends javax.swing.JFrame {
     public Home(String username, UsersDT user) {
         initComponents();
 
-        jPanel2.setVisible(false);
+        jPanel2.setVisible(true);
         menuPanel.setVisible(true);
         layout = new CardLayout();
         this.username = username;
         this.user = user;
 
         // currentUserSession();
-
         // Panel Layout set to Card Layout to allow switching between different sections
         displayPanel.setLayout(layout);
         displayPanel.add("Home", new Welcome(username));
         displayPanel.add("Users", new UsersFrame());
-//        displayPanel.add("Customers", new CustomersFrame());
         displayPanel.add("Products", new ProductsFrame());
         displayPanel.add("Suppliers", new SuppliersFrame());
-//        displayPanel.add("Current Stock", new CurrentStockPage(username));
+        
 //        displayPanel.add("Sales", new SalesPage(username, this));
 //        displayPanel.add("Purchase", new PurchasePage(this));
 //        displayPanel.add("Logs", new UserLogsPage());
@@ -69,7 +68,7 @@ public class Home extends javax.swing.JFrame {
         layout.show(displayPanel, "Users");
     }
 
-    public void addCustPage() {
+    public void addOrderPage() {
         layout.show(displayPanel, "Customers");
     }
 
@@ -79,10 +78,6 @@ public class Home extends javax.swing.JFrame {
 
     public void addSuppFrame() {
         layout.show(displayPanel, "Suppliers");
-    }
-
-    public void addStockPage() {
-        layout.show(displayPanel, "Current Stock");
     }
 
     public void addSalesPage() {
@@ -95,6 +90,14 @@ public class Home extends javax.swing.JFrame {
 
     public void addLogsPage() {
         layout.show(displayPanel, "Logs");
+    }
+
+    void setColor(JPanel panel) {
+        panel.setBackground(new Color(51, 51, 51));
+    }
+
+    void resetColor(JPanel panel) {
+        panel.setBackground(new Color(17, 17, 20));
     }
 
     /**
@@ -110,13 +113,25 @@ public class Home extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         menuPanel = new javax.swing.JPanel();
-        usersButton = new javax.swing.JButton();
-        homeButton = new javax.swing.JButton();
-        suppButton = new javax.swing.JButton();
-        prodButton = new javax.swing.JButton();
+        suppPanel = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        prodPanel = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        orderPanel = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        salesInfoRecordsPanel = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        purchaseInfoRecordsPanel = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        usersPanel = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        userLogsPanel = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
         displayPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel2.setBackground(new java.awt.Color(8, 5, 3));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -126,101 +141,210 @@ public class Home extends javax.swing.JFrame {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 77, Short.MAX_VALUE)
+            .addGap(0, 89, Short.MAX_VALUE)
         );
 
-        usersButton.setText("Users");
-        usersButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                usersButtonActionPerformed(evt);
+        menuPanel.setBackground(new java.awt.Color(9, 9, 11));
+
+        suppPanel.setBackground(new java.awt.Color(17, 17, 20));
+        suppPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                suppPanelMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                suppPanelMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                suppPanelMousePressed(evt);
             }
         });
 
-        homeButton.setText("Home");
-        homeButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                homeButtonActionPerformed(evt);
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Suppliers");
+        suppPanel.add(jLabel1);
+
+        prodPanel.setBackground(new java.awt.Color(9, 9, 11));
+        prodPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                prodPanelMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                prodPanelMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                prodPanelMousePressed(evt);
             }
         });
 
-        suppButton.setText("Suppliers");
-        suppButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                suppButtonActionPerformed(evt);
+        jLabel2.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("Products");
+        prodPanel.add(jLabel2);
+
+        orderPanel.setBackground(new java.awt.Color(9, 9, 11));
+        orderPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                orderPanelMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                orderPanelMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                orderPanelMousePressed(evt);
             }
         });
 
-        prodButton.setText("Products");
-        prodButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                prodButtonActionPerformed(evt);
+        jLabel3.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("Purchase Order");
+        orderPanel.add(jLabel3);
+
+        salesInfoRecordsPanel.setBackground(new java.awt.Color(9, 9, 11));
+        salesInfoRecordsPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                salesInfoRecordsPanelMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                salesInfoRecordsPanelMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                salesInfoRecordsPanelMousePressed(evt);
             }
         });
+
+        jLabel4.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setText("Purchase Records");
+        salesInfoRecordsPanel.add(jLabel4);
+
+        purchaseInfoRecordsPanel.setBackground(new java.awt.Color(9, 9, 11));
+        purchaseInfoRecordsPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                purchaseInfoRecordsPanelMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                purchaseInfoRecordsPanelMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                purchaseInfoRecordsPanelMousePressed(evt);
+            }
+        });
+
+        jLabel5.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setText("Supply Records");
+        purchaseInfoRecordsPanel.add(jLabel5);
+
+        usersPanel.setBackground(new java.awt.Color(9, 9, 11));
+        usersPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                usersPanelMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                usersPanelMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                usersPanelMousePressed(evt);
+            }
+        });
+
+        jLabel6.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel6.setText("Users");
+        usersPanel.add(jLabel6);
+
+        userLogsPanel.setBackground(new java.awt.Color(9, 9, 11));
+        userLogsPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                userLogsPanelMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                userLogsPanelMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                userLogsPanelMousePressed(evt);
+            }
+        });
+
+        jLabel7.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel7.setText("User Logs");
+        userLogsPanel.add(jLabel7);
 
         javax.swing.GroupLayout menuPanelLayout = new javax.swing.GroupLayout(menuPanel);
         menuPanel.setLayout(menuPanelLayout);
         menuPanelLayout.setHorizontalGroup(
             menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(menuPanelLayout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(prodButton)
-                        .addComponent(suppButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(homeButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(menuPanelLayout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(usersButton, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(32, Short.MAX_VALUE))
+            .addComponent(suppPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(prodPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(orderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(salesInfoRecordsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
+            .addComponent(purchaseInfoRecordsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(usersPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(userLogsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         menuPanelLayout.setVerticalGroup(
             menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menuPanelLayout.createSequentialGroup()
-                .addGap(58, 58, 58)
-                .addComponent(homeButton)
-                .addGap(36, 36, 36)
-                .addComponent(suppButton)
-                .addGap(38, 38, 38)
-                .addComponent(prodButton)
-                .addGap(36, 36, 36)
-                .addComponent(usersButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(menuPanelLayout.createSequentialGroup()
+                .addGap(60, 60, 60)
+                .addComponent(suppPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(1, 1, 1)
+                .addComponent(prodPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(1, 1, 1)
+                .addComponent(orderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(1, 1, 1)
+                .addComponent(salesInfoRecordsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(1, 1, 1)
+                .addComponent(purchaseInfoRecordsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(1, 1, 1)
+                .addComponent(usersPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(1, 1, 1)
+                .addComponent(userLogsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(178, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout displayPanelLayout = new javax.swing.GroupLayout(displayPanel);
         displayPanel.setLayout(displayPanelLayout);
         displayPanelLayout.setHorizontalGroup(
             displayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 867, Short.MAX_VALUE)
+            .addGap(0, 801, Short.MAX_VALUE)
         );
         displayPanelLayout.setVerticalGroup(
             displayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 499, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(menuPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(displayPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(12, 12, 12))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(menuPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(displayPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(menuPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addComponent(displayPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(menuPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(displayPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -229,46 +353,124 @@ public class Home extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void usersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usersButtonActionPerformed
-        addUsersFrame();
-    }//GEN-LAST:event_usersButtonActionPerformed
-
-    private void homeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeButtonActionPerformed
-        addHomeFrame();
-    }//GEN-LAST:event_homeButtonActionPerformed
-
-    private void suppButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_suppButtonActionPerformed
+    private void suppPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_suppPanelMousePressed
         addSuppFrame();
-    }//GEN-LAST:event_suppButtonActionPerformed
+    }//GEN-LAST:event_suppPanelMousePressed
 
-    private void prodButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prodButtonActionPerformed
-       addProdFrame();
-    }//GEN-LAST:event_prodButtonActionPerformed
+    private void suppPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_suppPanelMouseEntered
+        setColor(suppPanel);
+    }//GEN-LAST:event_suppPanelMouseEntered
+
+    private void suppPanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_suppPanelMouseExited
+        resetColor(suppPanel);
+    }//GEN-LAST:event_suppPanelMouseExited
+
+    private void prodPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prodPanelMouseEntered
+        setColor(prodPanel);
+    }//GEN-LAST:event_prodPanelMouseEntered
+
+    private void prodPanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prodPanelMouseExited
+        resetColor(prodPanel);
+    }//GEN-LAST:event_prodPanelMouseExited
+
+    private void prodPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prodPanelMousePressed
+        addProdFrame();
+    }//GEN-LAST:event_prodPanelMousePressed
+
+    private void orderPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_orderPanelMouseEntered
+        setColor(orderPanel);
+    }//GEN-LAST:event_orderPanelMouseEntered
+
+    private void orderPanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_orderPanelMouseExited
+        resetColor(orderPanel);
+    }//GEN-LAST:event_orderPanelMouseExited
+
+    private void orderPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_orderPanelMousePressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_orderPanelMousePressed
+
+    private void salesInfoRecordsPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_salesInfoRecordsPanelMouseEntered
+        setColor(salesInfoRecordsPanel);
+    }//GEN-LAST:event_salesInfoRecordsPanelMouseEntered
+
+    private void salesInfoRecordsPanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_salesInfoRecordsPanelMouseExited
+        resetColor(salesInfoRecordsPanel);
+    }//GEN-LAST:event_salesInfoRecordsPanelMouseExited
+
+    private void salesInfoRecordsPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_salesInfoRecordsPanelMousePressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_salesInfoRecordsPanelMousePressed
+
+    private void purchaseInfoRecordsPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_purchaseInfoRecordsPanelMouseEntered
+        setColor(purchaseInfoRecordsPanel);
+    }//GEN-LAST:event_purchaseInfoRecordsPanelMouseEntered
+
+    private void purchaseInfoRecordsPanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_purchaseInfoRecordsPanelMouseExited
+        resetColor(purchaseInfoRecordsPanel);
+    }//GEN-LAST:event_purchaseInfoRecordsPanelMouseExited
+
+    private void purchaseInfoRecordsPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_purchaseInfoRecordsPanelMousePressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_purchaseInfoRecordsPanelMousePressed
+
+    private void usersPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_usersPanelMouseEntered
+        setColor(usersPanel);
+    }//GEN-LAST:event_usersPanelMouseEntered
+
+    private void usersPanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_usersPanelMouseExited
+        resetColor(usersPanel);
+    }//GEN-LAST:event_usersPanelMouseExited
+
+    private void usersPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_usersPanelMousePressed
+        addUsersFrame();
+    }//GEN-LAST:event_usersPanelMousePressed
+
+    private void userLogsPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userLogsPanelMouseEntered
+        setColor(userLogsPanel);
+    }//GEN-LAST:event_userLogsPanelMouseEntered
+
+    private void userLogsPanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userLogsPanelMouseExited
+        resetColor(userLogsPanel);
+    }//GEN-LAST:event_userLogsPanelMouseExited
+
+    private void userLogsPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userLogsPanelMousePressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_userLogsPanelMousePressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JPanel displayPanel;
-    private javax.swing.JButton homeButton;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel menuPanel;
-    private javax.swing.JButton prodButton;
-    private javax.swing.JButton suppButton;
-    private javax.swing.JButton usersButton;
+    private javax.swing.JPanel orderPanel;
+    private javax.swing.JPanel prodPanel;
+    private javax.swing.JPanel purchaseInfoRecordsPanel;
+    private javax.swing.JPanel salesInfoRecordsPanel;
+    private javax.swing.JPanel suppPanel;
+    private javax.swing.JPanel userLogsPanel;
+    private javax.swing.JPanel usersPanel;
     // End of variables declaration//GEN-END:variables
 }
