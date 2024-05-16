@@ -5,6 +5,7 @@
 package DA;
 
 import DT.ProdDT;
+import DT.SupplierDT;
 import Database.DatabaseHandler;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -20,6 +21,7 @@ public class Prod {
     Statement statement = null;
     Statement statement2 = null;
     ResultSet resultSet = null;
+    SupplierDT supp = new SupplierDT();
 
     public Prod() {
         try {
@@ -99,49 +101,36 @@ public class Prod {
         return sellPrice;
     }
 
-    String suppCode;
+    String suppID;
 
-    public String getSuppCode(String suppName) {
+    public String getSuppID(String suppName) {
         try {
-            String query = "SELECT suppliercode FROM suppliers WHERE fullname='" + suppName + "'";
+            String query = "SELECT supplierID FROM suppliers WHERE fullname='" + suppName + "'";
             resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
-                suppCode = resultSet.getString("suppliercode");
+                suppID = resultSet.getString("supplierID");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return suppCode;
+        return suppID;
     }
 
     String prodCode;
 
-    public String getProdCode(String prodName) {
+    String prodID;
+
+    public String getProdID(String prodname) {
         try {
-            String query = "SELECT productcode FROM products WHERE productname='" + prodName + "'";
+            String query = "SELECT productID FROM products WHERE productname='" + prodname + "'";
             resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
-                suppCode = resultSet.getString("productcode");
+                prodID = resultSet.getString("productID");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return prodCode;
-    }
-
-    String custCode;
-
-    public String getCustCode(String custName) {
-        try {
-            String query = "SELECT customercode FROM suppliers WHERE fullname='" + custName + "'";
-            resultSet = statement.executeQuery(query);
-            while (resultSet.next()) {
-                suppCode = resultSet.getString("customercode");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return custCode;
+        return prodID;
     }
 
     // Method to check for availability of stock in Inventory
@@ -171,7 +160,8 @@ public class Prod {
                     + productDTO.getSellPrice()
                     + "' AND brand='"
                     + productDTO.getBrand()
-                    + "'";
+                    + "' AND stock='"
+                    + productDTO.getQuantity();
             resultSet = statement.executeQuery(query);
             if (resultSet.next()) {
                 JOptionPane.showMessageDialog(null, "Product has already been added.");
@@ -187,19 +177,27 @@ public class Prod {
         try {
             String query = "INSERT INTO products VALUES(null,?,?,?,?,?)";
             prep1 = (PreparedStatement) conn.prepareStatement(query);
-            prep1.setString(1, productDTO.getProdCode());
-            prep1.setString(2, productDTO.getProdName());
-            prep1.setDouble(3, productDTO.getCostPrice());
-            prep1.setDouble(4, productDTO.getSellPrice());
-            prep1.setString(5, productDTO.getBrand());
-
-            String query2 = "INSERT INTO currentstock VALUES(?,?)";
-            prep2 = conn.prepareStatement(query2);
-            prep2.setString(1, productDTO.getProdCode());
-            prep2.setInt(2, productDTO.getQuantity());
+            prep1.setString(1, productDTO.getProdName());
+            prep1.setDouble(2, productDTO.getCostPrice());
+            prep1.setDouble(3, productDTO.getSellPrice());
+            prep1.setString(4, productDTO.getBrand());
+            prep1.setString(5, String.valueOf(productDTO.getQuantity()));
 
             prep1.executeUpdate();
-            prep2.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Product added and ready for sale.");
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    public void addRestock(ProdDT prod) {
+        try {
+            String query = "UPDATE products SET stock=? WHERE productname=?";
+            prep1 = (PreparedStatement) conn.prepareStatement(query);
+            prep1.setString(1, String.valueOf(prod.getQuantity()));
+            prep1.setString(2, prod.getProdName());
+
+            prep1.executeUpdate();
             JOptionPane.showMessageDialog(null, "Product added and ready for sale.");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -211,8 +209,8 @@ public class Prod {
         try {
             String query = "INSERT INTO purchaseinfo VALUES(null,?,?,?,?,?)";
             prep1 = conn.prepareStatement(query);
-            prep1.setString(1, productDTO.getSuppCode());
-            prep1.setString(2, productDTO.getProdCode());
+            prep1.setString(1, Integer.toString(productDTO.getProdID()));
+            prep1.setString(2, Integer.toString(productDTO.getSuppID()));
             prep1.setString(3, productDTO.getDate());
             prep1.setInt(4, productDTO.getQuantity());
             prep1.setDouble(5, productDTO.getTotalCost());
@@ -223,31 +221,24 @@ public class Prod {
             throwables.printStackTrace();
         }
 
-        String prodCode = productDTO.getProdCode();
-        if (checkStock(prodCode)) {
-            try {
-                String query = "UPDATE currentstock SET quantity=quantity+? WHERE productcode=?";
-                prep1 = conn.prepareStatement(query);
-                prep1.setInt(1, productDTO.getQuantity());
-                prep1.setString(2, prodCode);
+    }
+    
+        public void addRestockPurchase(ProdDT productDTO) {
+        try {
+            String query = "INSERT INTO purchaseinfo VALUES(null,?,?,?,?,?)";
+            prep1 = conn.prepareStatement(query);
+            prep1.setString(1, Integer.toString(productDTO.getProdID()));
+            prep1.setString(2, Integer.toString(productDTO.getSuppID()));
+            prep1.setString(3, productDTO.getDate());
+            prep1.setInt(4, productDTO.getRestock());
+            prep1.setDouble(5, productDTO.getTotalCost());
 
-                prep1.executeUpdate();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-        } else if (!checkStock(prodCode)) {
-            try {
-                String query = "INSERT INTO currentstock VALUES(?,?)";
-                prep1 = (PreparedStatement) conn.prepareStatement(query);
-                prep1.setString(1, productDTO.getProdCode());
-                prep1.setInt(2, productDTO.getQuantity());
-
-                prep1.executeUpdate();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
+            prep1.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Purchase log added.");
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
-        deleteStock();
+
     }
 
     // Method to update existing product details
@@ -403,7 +394,7 @@ public class Prod {
     // Products data set retrieval for display
     public ResultSet getQueryResult() {
         try {
-            String query = "SELECT productname,costprice,sellprice,brand,stocks FROM products ORDER BY productID";
+            String query = "SELECT productID,productname,costprice,sellprice,brand,stock FROM products";
             resultSet = statement.executeQuery(query);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -517,9 +508,9 @@ public class Prod {
         return resultSet;
     }
 
-    public ResultSet getProdName(String code) {
+    public ResultSet getProdName(String prodname) {
         try {
-            String query = "SELECT productname FROM products WHERE productcode='" + code + "'";
+            String query = "SELECT productname FROM products WHERE productname='" + prodname + "'";
             resultSet = statement.executeQuery(query);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -527,36 +518,19 @@ public class Prod {
         return resultSet;
     }
 
-    public String getSuppName(int ID) {
-        String name = null;
+    public int getStock(String prodname) {
+        String stocks = null;
         try {
-            String query = "SELECT fullname FROM suppliers "
-                    + "INNER JOIN purchaseinfo ON suppliers.suppliercode=purchaseinfo.suppliercode "
-                    + "WHERE purchaseid='" + ID + "'";
+            String query = "SELECT stock FROM products WHERE productname='" + prodname + "'";
             resultSet = statement.executeQuery(query);
             if (resultSet.next()) {
-                name = resultSet.getString("fullname");
+                stocks = resultSet.getString("stock");
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return name;
-    }
-
-    public String getCustName(int ID) {
-        String name = null;
-        try {
-            String query = "SELECT fullname FROM customers "
-                    + "INNER JOIN salesinfo ON customers.customercode=salesinfo.customercode "
-                    + "WHERE salesid='" + ID + "'";
-            resultSet = statement.executeQuery(query);
-            if (resultSet.next()) {
-                name = resultSet.getString("fullname");
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return name;
+        int stock = Integer.parseInt(stocks);
+        return stock;
     }
 
     public String getPurchaseDate(int ID) {

@@ -35,7 +35,7 @@ public class Supplier {
                     + supplierDTO.getFullName()
                     + "' AND location='"
                     + supplierDTO.getLocation()
-                    + "' AND mobile='"
+                    + "' AND contact='"
                     + supplierDTO.getPhone()
                     + "'";
             resultSet = statement.executeQuery(query);
@@ -53,9 +53,9 @@ public class Supplier {
         try {
             String query = "INSERT INTO suppliers VALUES(null,?,?,?)";
             prepStatement = conn.prepareStatement(query);
-            prepStatement.setString(2, supplierDTO.getFullName());
-            prepStatement.setString(3, supplierDTO.getLocation());
-            prepStatement.setString(4, supplierDTO.getPhone());
+            prepStatement.setString(1, supplierDTO.getFullName());
+            prepStatement.setString(2, supplierDTO.getLocation());
+            prepStatement.setString(3, supplierDTO.getPhone());
             prepStatement.executeUpdate();
             JOptionPane.showMessageDialog(null, "New supplier has been added successfully.");
         } catch (SQLException e) {
@@ -94,7 +94,7 @@ public class Supplier {
     // Supplier data set retrieval method
     public ResultSet getQueryResult() {
         try {
-            String query = "SELECT supplierID, fullname, location, contact FROM suppliers";
+            String query = "SELECT * FROM suppliers";
             resultSet = statement.executeQuery(query);
         } catch (Exception e) {
             e.printStackTrace();

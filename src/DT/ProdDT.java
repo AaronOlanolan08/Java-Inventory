@@ -10,10 +10,10 @@ package DT;
  */
 public class ProdDT {
 
-    private int prodID, quantity, userID;
+    private int prodID, quantity, userID, suppID, restock;
     private double costPrice, sellPrice;
     private Double totalCost, totalRevenue;
-    private String prodCode, prodName, date, suppCode, custCode, custName, brand;
+    private String prodCode, prodName, date, suppName, custCode, custName, brand;
 
     public int getProdID() {
         return prodID;
@@ -39,6 +39,14 @@ public class ProdDT {
         this.userID = userID;
     }
 
+    public int getSuppID() {
+        return suppID;
+    }
+
+    public void setSuppID(int suppID) {
+        this.suppID = suppID;
+    }
+
     public double getCostPrice() {
         return costPrice;
     }
@@ -57,6 +65,14 @@ public class ProdDT {
 
     public Double getTotalCost() {
         return totalCost;
+    }
+
+    public int getRestock() {
+        return restock;
+    }
+
+    public void setRestock(int restock) {
+        this.restock = restock;
     }
 
     public void setTotalCost(Double totalCost) {
@@ -95,12 +111,12 @@ public class ProdDT {
         this.date = date;
     }
 
-    public String getSuppCode() {
-        return suppCode;
+    public String getSuppName() {
+        return suppName;
     }
 
-    public void setSuppCode(String suppCode) {
-        this.suppCode = suppCode;
+    public void setSuppName(String suppName) {
+        this.suppName = suppName;
     }
 
     public String getCustCode() {

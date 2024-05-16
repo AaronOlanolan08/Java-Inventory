@@ -5,7 +5,14 @@
 package UI;
 
 import DA.Prod;
+import DA.Supplier;
+import DT.ProdDT;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -13,11 +20,15 @@ import java.sql.*;
  */
 public class ProductsFrame extends javax.swing.JPanel {
 
+    ProdDT prod;
+    Prod prd;
+
     /**
      * Creates new form ProductsFrame
      */
     public ProductsFrame() {
         initComponents();
+        loadComboBox();
         loadDataSet();
     }
 
@@ -32,6 +43,15 @@ public class ProductsFrame extends javax.swing.JPanel {
             productTable.setModel(productDAO.buildTableModel(productDAO.getProductSearch(text)));
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        }
+    }
+
+    public void loadComboBox() {
+        try {
+            Supplier supplierDAO = new Supplier();
+            suppCbox.setModel(supplierDAO.setComboItems(supplierDAO.getQueryResult()));
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -50,6 +70,24 @@ public class ProductsFrame extends javax.swing.JPanel {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         productTable = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        suppCbox = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        nameField = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        quantityField = new javax.swing.JTextField();
+        costField = new javax.swing.JTextField();
+        sellField = new javax.swing.JTextField();
+        brandField = new javax.swing.JTextField();
+        addButton = new javax.swing.JButton();
+        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        jLabel7 = new javax.swing.JLabel();
+        restockButton = new javax.swing.JButton();
+        clearButton = new javax.swing.JButton();
 
         productTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -70,29 +108,322 @@ public class ProductsFrame extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        productTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                productTableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(productTable);
+        if (productTable.getColumnModel().getColumnCount() > 0) {
+            productTable.getColumnModel().getColumn(0).setResizable(false);
+        }
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Enter Product Details"));
+
+        suppCbox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jLabel1.setText("Select Supplier:");
+
+        jLabel2.setText("Product Name:");
+
+        jLabel3.setText("Cost Price:");
+
+        jLabel4.setText("Sell Price:");
+
+        jLabel5.setText("Brand:");
+
+        jLabel6.setText("Quantity:");
+
+        addButton.setText("Add");
+        addButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("Date:");
+
+        restockButton.setText("Restock");
+        restockButton.setEnabled(false);
+        restockButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                restockButtonActionPerformed(evt);
+            }
+        });
+
+        clearButton.setText("Clear");
+        clearButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(33, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel7))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(suppCbox, 0, 101, Short.MAX_VALUE)
+                                .addComponent(nameField)
+                                .addComponent(quantityField)
+                                .addComponent(costField)
+                                .addComponent(sellField)
+                                .addComponent(brandField))
+                            .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(addButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(restockButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(clearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)))
+                .addGap(35, 35, 35))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(75, 75, 75)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(suppCbox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6)
+                    .addComponent(quantityField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(costField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
+                    .addComponent(sellField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addComponent(brandField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
+                .addGap(21, 21, 21)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(addButton)
+                    .addComponent(restockButton)
+                    .addComponent(clearButton))
+                .addContainerGap(91, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 516, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(261, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 519, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(64, 64, 64)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 481, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(58, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
+        prod = new ProdDT();
+        prd = new Prod();
+        if (nameField.getText().equals("") || jDateChooser1.getDate() == null
+                || quantityField.getText().equals("") || costField.getText().equals("")
+                || sellField.getText().equals("") || brandField.getText().equals(""))
+            JOptionPane.showMessageDialog(null, "Please enter all the required details.");
+        else {
+            try {
+                ResultSet resultSet = prd.getProdName(nameField.getText());
+                if (resultSet.next()) {
+//                    //productDTO.setProdName(nameText.getText());
+//                    prod.setDate(jDateChooser1.getDate().toString());
+//                    prod.setQuantity(Integer.parseInt(quantityField.getText()) - prd.getStock(nameField.getText()));
+//                    //productDTO.setCostPrice(Double.parseDouble(costText.getText()));
+//                    //productDTO.setSellPrice(Double.parseDouble(sellText.getText()));
+//                    //productDTO.setBrand(brandText.getText());
+//                    Double costPrice = Double.valueOf(costField.getText());
+//                    Double totalCost = costPrice * Integer.valueOf(quantityField.getText());
+//                    prod.setTotalCost(totalCost);
+//                    loadDataSet();
+
+                    JOptionPane.showMessageDialog(null, "This product is already added in the inventory.");
+
+                } else {
+                    prod.setProdName(nameField.getText());
+                    prod.setCostPrice(Double.parseDouble(costField.getText()));
+                    prod.setSellPrice(Double.parseDouble(sellField.getText()));
+                    prod.setBrand(brandField.getText());
+                    prod.setQuantity(Integer.parseInt(quantityField.getText()));
+                    prd.addFunction(prod);
+                    prod.setSuppName(suppCbox.getSelectedItem().toString());
+                    String name = prod.getSuppName();
+                    String id = prd.getSuppID(name);
+                    prod.setSuppID(Integer.parseInt(id));
+                    String pid = prd.getProdID(nameField.getText());
+                    prod.setProdID(Integer.parseInt(pid));
+                    prod.setDate(jDateChooser1.getDate().toString());
+                    Double costPrice = Double.valueOf(costField.getText());
+                    Double totalCost = costPrice * Integer.valueOf(quantityField.getText());
+                    prod.setTotalCost(totalCost);
+                    prd.addPurchaseDAO(prod);
+                    loadDataSet();
+                    clear();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_addButtonActionPerformed
+    private boolean tableClicked = false;
+    private void productTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productTableMouseClicked
+        if (!tableClicked) { // Check if the table click event is enabled
+            int row = productTable.getSelectedRow();
+            int col = productTable.getColumnCount();
+            Object[] data = new Object[col];
+
+            for (int i = 0; i < col; i++) {
+                data[i] = productTable.getValueAt(row, i);
+            }
+            nameField.setText((String) data[1]);
+            Double costValue = (Double) data[2];
+            costField.setText(String.valueOf(costValue));
+            Double sellValue = (Double) data[3];
+            sellField.setText(String.valueOf(sellValue));
+            brandField.setText((String) data[4]);
+            restockButton.setEnabled(true);
+        }
+
+        // Toggle the tableClicked variable
+        tableClicked = !tableClicked;
+    }//GEN-LAST:event_productTableMouseClicked
+
+    private void restockButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restockButtonActionPerformed
+        prod = new ProdDT();
+        prd = new Prod();
+        String userInput = JOptionPane.showInputDialog(null, "Enter the quantity of the product:");
+        try {
+            int quantity = Integer.parseInt(userInput);
+            prod.setQuantity(quantity + prd.getStock(nameField.getText()));
+            prod.setRestock(quantity);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Invalid input! Please enter a valid number.");
+        }
+        try {
+            Supplier supplierDAO = new Supplier();
+            JComboBox<String> suppCbox = new JComboBox<>(supplierDAO.setComboItems(supplierDAO.getQueryResult()));
+
+            int choice = JOptionPane.showOptionDialog(
+                    null,
+                    suppCbox,
+                    "Select a Supplier",
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    null,
+                    null
+            );
+
+            if (choice == JOptionPane.OK_OPTION) {
+
+                String selectedSupplier = (String) suppCbox.getSelectedItem();
+                prod.setSuppName(selectedSupplier);
+                String name = prod.getSuppName();
+                String id = prd.getSuppID(name);
+                prod.setSuppID(Integer.parseInt(id));
+
+                String pid = prd.getProdID(nameField.getText());
+                prod.setProdID(Integer.parseInt(pid));
+
+                ZonedDateTime currentDateTime = ZonedDateTime.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E MMM dd HH:mm:ss z yyyy");
+                String formattedDateTime = currentDateTime.format(formatter);
+                prod.setDate(formattedDateTime);
+
+                Double costPrice = Double.valueOf(costField.getText());
+                Double totalCost = costPrice * prod.getRestock();
+                prod.setTotalCost(totalCost);
+
+                prd.addRestockPurchase(prod);
+
+                prod.setProdName(nameField.getText());
+                prod.setCostPrice(Double.parseDouble(costField.getText()));
+                prod.setSellPrice(Double.parseDouble(sellField.getText()));
+                prod.setBrand(brandField.getText());
+                prd.addRestock(prod);
+
+                loadDataSet();
+                restockButton.setEnabled(false);
+                clear();
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_restockButtonActionPerformed
+
+    private void clear() {
+        nameField.setText("");
+        costField.setText("");
+        sellField.setText("");
+        brandField.setText("");
+        quantityField.setText("");
+        jDateChooser1.setDate(null);
+        restockButton.setEnabled(false);
+    }
+    private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
+        clear();
+    }//GEN-LAST:event_clearButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addButton;
+    private javax.swing.JTextField brandField;
+    private javax.swing.JButton clearButton;
+    private javax.swing.JTextField costField;
+    private com.toedter.calendar.JDateChooser jDateChooser1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField nameField;
     private javax.swing.JTable productTable;
+    private javax.swing.JTextField quantityField;
+    private javax.swing.JButton restockButton;
+    private javax.swing.JTextField sellField;
+    private javax.swing.JComboBox<String> suppCbox;
     // End of variables declaration//GEN-END:variables
 }

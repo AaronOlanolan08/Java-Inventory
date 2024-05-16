@@ -6,8 +6,6 @@ package UI;
 
 import DT.UsersDT;
 import Database.DatabaseHandler;
-import java.math.BigInteger;
-import java.security.MessageDigest;
 import java.time.LocalDateTime;
 import javax.swing.JOptionPane;
 
@@ -50,9 +48,9 @@ public class Login extends javax.swing.JFrame {
 
         jLabel1.setText("jLabel1");
 
-        jLabel2.setText("jLabel2");
+        jLabel2.setText("Username:");
 
-        jLabel3.setText("jLabel3");
+        jLabel3.setText("Password:");
 
         passText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -67,7 +65,7 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        clearButton.setText("jButton2");
+        clearButton.setText("CLEAR");
         clearButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 clearButtonActionPerformed(evt);
@@ -97,8 +95,7 @@ public class Login extends javax.swing.JFrame {
                                 .addGap(57, 57, 57)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(passText, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
-                                    .addComponent(userText, javax.swing.GroupLayout.Alignment.LEADING))))
-                        .addGap(18, 18, 18)))
+                                    .addComponent(userText, javax.swing.GroupLayout.Alignment.LEADING))))))
                 .addContainerGap(385, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -141,23 +138,6 @@ public class Login extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private String encryptPass(String pass) {
-        String encPass = null;
-        if (pass == null) {
-            return null;
-        }
-
-        try {
-            MessageDigest mDigest = MessageDigest.getInstance("MD5");
-            mDigest.update(pass.getBytes(), 0, pass.length());
-            encPass = new BigInteger(1, mDigest.digest()).toString(16);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        return encPass;
-    }
-
     private void passTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passTextActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_passTextActionPerformed
@@ -169,8 +149,6 @@ public class Login extends javax.swing.JFrame {
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         String username = userText.getText();
         String password = passText.getText();
-        //TODO Password encryption to be added later:
-        //String password = encryptPass(pass);
 
         if (new DatabaseHandler().checkLogin(username, password)) {
             inTime = LocalDateTime.now();
