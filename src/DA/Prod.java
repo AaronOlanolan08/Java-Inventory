@@ -87,10 +87,10 @@ public class Prod {
         return costPrice;
     }
 
-    public Double getProdSell(String prodCode) {
+    public Double getProdSell(String prodname) {
         Double sellPrice = null;
         try {
-            String query = "SELECT sellprice FROM products WHERE productcode='" + prodCode + "'";
+            String query = "SELECT sellprice FROM products WHERE productname='" + prodname + "'";
             resultSet = statement.executeQuery(query);
             if (resultSet.next()) {
                 sellPrice = resultSet.getDouble("sellprice");
@@ -222,8 +222,8 @@ public class Prod {
         }
 
     }
-    
-        public void addRestockPurchase(ProdDT productDTO) {
+
+    public void addRestockPurchase(ProdDT productDTO) {
         try {
             String query = "INSERT INTO purchaseinfo VALUES(null,?,?,?,?,?)";
             prep1 = conn.prepareStatement(query);
@@ -359,35 +359,34 @@ public class Prod {
     }
 
     // Sales transaction handling
-    public void sellProductDAO(ProdDT productDTO, String username) {
-        int quantity = 0;
-        String prodCode = null;
+    public void buyProductDAO(ProdDT productDTO, int uid) {
         try {
-            String query = "SELECT * FROM currentstock WHERE productcode='" + productDTO.getProdCode() + "'";
-            resultSet = statement.executeQuery(query);
-            while (resultSet.next()) {
-                prodCode = resultSet.getString("productcode");
-                quantity = resultSet.getInt("quantity");
-            }
+            int quantity = getStock(productDTO.getProdName());
+
             if (productDTO.getQuantity() > quantity) {
                 JOptionPane.showMessageDialog(null, "Insufficient stock for this product.");
             } else if (productDTO.getQuantity() <= 0) {
                 JOptionPane.showMessageDialog(null, "Please enter a valid quantity");
             } else {
-                String stockQuery = "UPDATE currentstock SET quantity=quantity-'"
-                        + productDTO.getQuantity()
-                        + "' WHERE productcode='"
-                        + productDTO.getProdCode()
-                        + "'";
-                String salesQuery = "INSERT INTO salesinfo(date,productcode,customercode,quantity,revenue,soldby)"
-                        + "VALUES('" + productDTO.getDate() + "','" + productDTO.getProdCode() + "','" + productDTO.getCustCode()
-                        + "','" + productDTO.getQuantity() + "','" + productDTO.getTotalRevenue() + "','" + username + "')";
-                statement.executeUpdate(stockQuery);
-                statement.executeUpdate(salesQuery);
+                String stockQuery = "UPDATE products SET stock=stock-? WHERE productID=?";
+                String salesQuery = "INSERT INTO salesinfo VALUES (null, ?, ?, ?, ?, ?)";
+
+                PreparedStatement stockPrepStmt = conn.prepareStatement(stockQuery);
+                stockPrepStmt.setInt(1, productDTO.getQuantity());
+                stockPrepStmt.setInt(2, productDTO.getProdID());
+                stockPrepStmt.executeUpdate();
+
+                PreparedStatement salesPrepStmt = conn.prepareStatement(salesQuery);
+                salesPrepStmt.setInt(1, productDTO.getProdID());
+                salesPrepStmt.setInt(2, uid);
+                salesPrepStmt.setString(3, productDTO.getDate());
+                salesPrepStmt.setInt(4, productDTO.getQuantity());
+                salesPrepStmt.setDouble(5, productDTO.getTotalRevenue());
+                salesPrepStmt.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Product sold.");
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
