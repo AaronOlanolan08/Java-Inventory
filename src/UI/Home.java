@@ -39,9 +39,8 @@ public class Home extends javax.swing.JFrame {
         displayPanel.add("Users", new UsersFrame());
         displayPanel.add("Products", new ProductsFrame());
         displayPanel.add("Suppliers", new SuppliersFrame());
-        
-//        displayPanel.add("Sales", new SalesPage(username, this));
-//        displayPanel.add("Purchase", new PurchasePage(this));
+        displayPanel.add("Purchase Order", new OrdersFrame(username));
+        displayPanel.add("Purchase Records", new PRecordsFrame());
 //        displayPanel.add("Logs", new UserLogsPage());
 
         this.addWindowListener(new WindowAdapter() {
@@ -68,8 +67,8 @@ public class Home extends javax.swing.JFrame {
         layout.show(displayPanel, "Users");
     }
 
-    public void addOrderPage() {
-        layout.show(displayPanel, "Customers");
+    public void addOrdersFrame() {
+        layout.show(displayPanel, "Purchase Order");
     }
 
     public void addProdFrame() {
@@ -80,12 +79,12 @@ public class Home extends javax.swing.JFrame {
         layout.show(displayPanel, "Suppliers");
     }
 
-    public void addSalesPage() {
-        layout.show(displayPanel, "Sales");
+    public void addSalesRecordsFrame() {
+        layout.show(displayPanel, "Sales Records");
     }
 
-    public void addPurchasePage() {
-        layout.show(displayPanel, "Purchase");
+    public void addPRecordsFrame() {
+        layout.show(displayPanel, "Purchase Records");
     }
 
     public void addLogsPage() {
@@ -347,22 +346,7 @@ public class Home extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -400,7 +384,7 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_orderPanelMouseExited
 
     private void orderPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_orderPanelMousePressed
-        // TODO add your handling code here:
+        addOrdersFrame();
     }//GEN-LAST:event_orderPanelMousePressed
 
     private void salesInfoRecordsPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_salesInfoRecordsPanelMouseEntered
@@ -424,7 +408,7 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_purchaseInfoRecordsPanelMouseExited
 
     private void purchaseInfoRecordsPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_purchaseInfoRecordsPanelMousePressed
-        // TODO add your handling code here:
+        addPRecordsFrame();
     }//GEN-LAST:event_purchaseInfoRecordsPanelMousePressed
 
     private void usersPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_usersPanelMouseEntered

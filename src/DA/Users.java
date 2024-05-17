@@ -182,7 +182,7 @@ public class Users {
 
             try (ResultSet rs = prepStatement.executeQuery()) {
                 if (rs.next()) {
-                    userID = rs.getInt("id");
+                    userID = rs.getInt("userID");
                 }
             }
         } catch (SQLException e) {
