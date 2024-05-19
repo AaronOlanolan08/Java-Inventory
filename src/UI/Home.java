@@ -26,7 +26,6 @@ public class Home extends javax.swing.JFrame {
     public Home(String username, UsersDT user) {
         initComponents();
 
-        jPanel2.setVisible(true);
         menuPanel.setVisible(true);
         layout = new CardLayout();
         this.username = username;
@@ -40,7 +39,8 @@ public class Home extends javax.swing.JFrame {
         displayPanel.add("Products", new ProductsFrame());
         displayPanel.add("Suppliers", new SuppliersFrame());
         displayPanel.add("Purchase Order", new OrdersFrame(username));
-        displayPanel.add("Purchase Records", new PRecordsFrame());
+        displayPanel.add("Purchase Records", new PRecordsFrame(this));
+        displayPanel.add("Sales Records", new SRecordsFrame(this));
 //        displayPanel.add("Logs", new UserLogsPage());
 
         this.addWindowListener(new WindowAdapter() {
@@ -96,7 +96,7 @@ public class Home extends javax.swing.JFrame {
     }
 
     void resetColor(JPanel panel) {
-        panel.setBackground(new Color(17, 17, 20));
+        panel.setBackground(new Color(50,57, 61));
     }
 
     /**
@@ -110,7 +110,6 @@ public class Home extends javax.swing.JFrame {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
         menuPanel = new javax.swing.JPanel();
         suppPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -118,34 +117,24 @@ public class Home extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         orderPanel = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        salesInfoRecordsPanel = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
         purchaseInfoRecordsPanel = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         usersPanel = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         userLogsPanel = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
+        homePanel = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
         displayPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel2.setBackground(new java.awt.Color(8, 5, 3));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 89, Short.MAX_VALUE)
-        );
+        menuPanel.setBackground(new java.awt.Color(50, 57, 61));
+        menuPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        menuPanel.setBackground(new java.awt.Color(9, 9, 11));
-
-        suppPanel.setBackground(new java.awt.Color(17, 17, 20));
+        suppPanel.setBackground(new java.awt.Color(50, 57, 61));
         suppPanel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 suppPanelMouseEntered(evt);
@@ -157,14 +146,17 @@ public class Home extends javax.swing.JFrame {
                 suppPanelMousePressed(evt);
             }
         });
+        suppPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Suppliers");
-        suppPanel.add(jLabel1);
+        suppPanel.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(47, 5, 60, -1));
 
-        prodPanel.setBackground(new java.awt.Color(9, 9, 11));
+        menuPanel.add(suppPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 150, -1));
+
+        prodPanel.setBackground(new java.awt.Color(50, 57, 61));
         prodPanel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 prodPanelMouseEntered(evt);
@@ -176,14 +168,17 @@ public class Home extends javax.swing.JFrame {
                 prodPanelMousePressed(evt);
             }
         });
+        prodPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel2.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Products");
-        prodPanel.add(jLabel2);
+        prodPanel.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(46, 5, 60, -1));
 
-        orderPanel.setBackground(new java.awt.Color(9, 9, 11));
+        menuPanel.add(prodPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 150, -1));
+
+        orderPanel.setBackground(new java.awt.Color(50, 57, 61));
         orderPanel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 orderPanelMouseEntered(evt);
@@ -195,33 +190,17 @@ public class Home extends javax.swing.JFrame {
                 orderPanelMousePressed(evt);
             }
         });
+        orderPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel3.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Purchase Order");
-        orderPanel.add(jLabel3);
+        orderPanel.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(29, 5, -1, -1));
 
-        salesInfoRecordsPanel.setBackground(new java.awt.Color(9, 9, 11));
-        salesInfoRecordsPanel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                salesInfoRecordsPanelMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                salesInfoRecordsPanelMouseExited(evt);
-            }
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                salesInfoRecordsPanelMousePressed(evt);
-            }
-        });
+        menuPanel.add(orderPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 210, 150, -1));
 
-        jLabel4.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("Purchase Records");
-        salesInfoRecordsPanel.add(jLabel4);
-
-        purchaseInfoRecordsPanel.setBackground(new java.awt.Color(9, 9, 11));
+        purchaseInfoRecordsPanel.setBackground(new java.awt.Color(50, 57, 61));
         purchaseInfoRecordsPanel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 purchaseInfoRecordsPanelMouseEntered(evt);
@@ -233,14 +212,17 @@ public class Home extends javax.swing.JFrame {
                 purchaseInfoRecordsPanelMousePressed(evt);
             }
         });
+        purchaseInfoRecordsPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel5.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("Supply Records");
-        purchaseInfoRecordsPanel.add(jLabel5);
+        jLabel5.setText("Records");
+        purchaseInfoRecordsPanel.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(29, 5, 90, -1));
 
-        usersPanel.setBackground(new java.awt.Color(9, 9, 11));
+        menuPanel.add(purchaseInfoRecordsPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 240, 150, -1));
+
+        usersPanel.setBackground(new java.awt.Color(50, 57, 61));
         usersPanel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 usersPanelMouseEntered(evt);
@@ -252,14 +234,17 @@ public class Home extends javax.swing.JFrame {
                 usersPanelMousePressed(evt);
             }
         });
+        usersPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel6.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setText("Users");
-        usersPanel.add(jLabel6);
+        usersPanel.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(48, 5, 50, -1));
 
-        userLogsPanel.setBackground(new java.awt.Color(9, 9, 11));
+        menuPanel.add(usersPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 270, 150, -1));
+
+        userLogsPanel.setBackground(new java.awt.Color(50, 57, 61));
         userLogsPanel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 userLogsPanelMouseEntered(evt);
@@ -271,80 +256,54 @@ public class Home extends javax.swing.JFrame {
                 userLogsPanelMousePressed(evt);
             }
         });
+        userLogsPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel7.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("User Logs");
-        userLogsPanel.add(jLabel7);
+        userLogsPanel.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(46, 5, -1, -1));
 
-        javax.swing.GroupLayout menuPanelLayout = new javax.swing.GroupLayout(menuPanel);
-        menuPanel.setLayout(menuPanelLayout);
-        menuPanelLayout.setHorizontalGroup(
-            menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(suppPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(prodPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(orderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(salesInfoRecordsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
-            .addComponent(purchaseInfoRecordsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(usersPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(userLogsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        menuPanelLayout.setVerticalGroup(
-            menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(menuPanelLayout.createSequentialGroup()
-                .addGap(60, 60, 60)
-                .addComponent(suppPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
-                .addComponent(prodPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
-                .addComponent(orderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
-                .addComponent(salesInfoRecordsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
-                .addComponent(purchaseInfoRecordsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
-                .addComponent(usersPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
-                .addComponent(userLogsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(178, Short.MAX_VALUE))
-        );
+        menuPanel.add(userLogsPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 330, 150, -1));
+
+        homePanel.setBackground(new java.awt.Color(50, 57, 61));
+        homePanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                homePanelMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                homePanelMouseExited(evt);
+            }
+        });
+        homePanel.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                homePanelKeyPressed(evt);
+            }
+        });
+        homePanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-home-24.png"))); // NOI18N
+        homePanel.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 0, 30, 30));
+
+        menuPanel.add(homePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 140, 30));
+
+        jPanel1.add(menuPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 160, 600));
+
+        displayPanel.setBackground(new java.awt.Color(255, 255, 240));
 
         javax.swing.GroupLayout displayPanelLayout = new javax.swing.GroupLayout(displayPanel);
         displayPanel.setLayout(displayPanelLayout);
         displayPanelLayout.setHorizontalGroup(
             displayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 801, Short.MAX_VALUE)
+            .addGap(0, 900, Short.MAX_VALUE)
         );
         displayPanelLayout.setVerticalGroup(
             displayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 510, Short.MAX_VALUE)
         );
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(menuPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(displayPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(menuPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(displayPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        jPanel1.add(displayPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 90, 900, 510));
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -387,18 +346,6 @@ public class Home extends javax.swing.JFrame {
         addOrdersFrame();
     }//GEN-LAST:event_orderPanelMousePressed
 
-    private void salesInfoRecordsPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_salesInfoRecordsPanelMouseEntered
-        setColor(salesInfoRecordsPanel);
-    }//GEN-LAST:event_salesInfoRecordsPanelMouseEntered
-
-    private void salesInfoRecordsPanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_salesInfoRecordsPanelMouseExited
-        resetColor(salesInfoRecordsPanel);
-    }//GEN-LAST:event_salesInfoRecordsPanelMouseExited
-
-    private void salesInfoRecordsPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_salesInfoRecordsPanelMousePressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_salesInfoRecordsPanelMousePressed
-
     private void purchaseInfoRecordsPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_purchaseInfoRecordsPanelMouseEntered
         setColor(purchaseInfoRecordsPanel);
     }//GEN-LAST:event_purchaseInfoRecordsPanelMouseEntered
@@ -435,24 +382,35 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_userLogsPanelMousePressed
 
+    private void homePanelKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_homePanelKeyPressed
+        addHomeFrame();
+    }//GEN-LAST:event_homePanelKeyPressed
+
+    private void homePanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homePanelMouseExited
+        resetColor(homePanel);
+    }//GEN-LAST:event_homePanelMouseExited
+
+    private void homePanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homePanelMouseEntered
+        setColor(homePanel);
+    }//GEN-LAST:event_homePanelMouseEntered
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JPanel displayPanel;
+    private javax.swing.JPanel homePanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel menuPanel;
     private javax.swing.JPanel orderPanel;
     private javax.swing.JPanel prodPanel;
     private javax.swing.JPanel purchaseInfoRecordsPanel;
-    private javax.swing.JPanel salesInfoRecordsPanel;
     private javax.swing.JPanel suppPanel;
     private javax.swing.JPanel userLogsPanel;
     private javax.swing.JPanel usersPanel;

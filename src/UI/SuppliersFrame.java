@@ -34,8 +34,9 @@ public class SuppliersFrame extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
         suppTable = new javax.swing.JTable();
+        jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -46,34 +47,42 @@ public class SuppliersFrame extends javax.swing.JPanel {
         addButton = new javax.swing.JButton();
         editButton = new javax.swing.JButton();
         clearButton = new javax.swing.JButton();
-        deleteButton = new javax.swing.JButton();
+        searchField = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         suppTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
                 {null, null, null, null}
             },
             new String [] {
-                "Supplier ID", "Supplier Name", "Location", "Contact"
+                "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        suppTable.setPreferredSize(new java.awt.Dimension(450, 80));
         suppTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 suppTableMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(suppTable);
+        jScrollPane2.setViewportView(suppTable);
+
+        add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 640, 470));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Enter Supplier Details"));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setText("Supplier Name:");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, -1, -1));
 
         jLabel2.setText("Location:");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, -1, -1));
 
         jLabel3.setText("Contact:");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(32, 239, -1, -1));
+        jPanel1.add(nameField, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 170, -1));
+        jPanel1.add(locationField, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, 170, -1));
+        jPanel1.add(contactField, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, 170, -1));
 
         addButton.setText("Add");
         addButton.addActionListener(new java.awt.event.ActionListener() {
@@ -81,6 +90,7 @@ public class SuppliersFrame extends javax.swing.JPanel {
                 addButtonActionPerformed(evt);
             }
         });
+        jPanel1.add(addButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 340, -1, -1));
 
         editButton.setText("Edit");
         editButton.addActionListener(new java.awt.event.ActionListener() {
@@ -88,6 +98,7 @@ public class SuppliersFrame extends javax.swing.JPanel {
                 editButtonActionPerformed(evt);
             }
         });
+        jPanel1.add(editButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 50, -1, -1));
 
         clearButton.setText("Clear");
         clearButton.addActionListener(new java.awt.event.ActionListener() {
@@ -95,94 +106,21 @@ public class SuppliersFrame extends javax.swing.JPanel {
                 clearButtonActionPerformed(evt);
             }
         });
+        jPanel1.add(clearButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 340, -1, -1));
 
-        deleteButton.setText("Delete");
-        deleteButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteButtonActionPerformed(evt);
+        jScrollPane1.setViewportView(jPanel1);
+
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 40, 260, 467));
+
+        searchField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                searchFieldKeyReleased(evt);
             }
         });
+        add(searchField, new org.netbeans.lib.awtextra.AbsoluteConstraints(497, 8, 131, -1));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel1)
-                        .addGap(27, 27, 27))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addGap(50, 50, 50)))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(contactField, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
-                    .addComponent(locationField)
-                    .addComponent(nameField))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(74, Short.MAX_VALUE)
-                .addComponent(addButton)
-                .addGap(18, 18, 18)
-                .addComponent(clearButton)
-                .addGap(45, 45, 45))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(deleteButton)
-                    .addComponent(editButton))
-                .addGap(17, 17, 17))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(editButton)
-                .addGap(47, 47, 47)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(locationField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(36, 36, 36)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(contactField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(79, 79, 79)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(addButton)
-                    .addComponent(clearButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-                .addComponent(deleteButton)
-                .addGap(31, 31, 31))
-        );
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        jLabel4.setText("Search:");
+        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(453, 11, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
@@ -190,13 +128,43 @@ public class SuppliersFrame extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Please enter all the required details.");
         else {
             SupplierDT supplierDTO = new SupplierDT();
+            Supplier supp = new Supplier();
             supplierDTO.setFullName(nameField.getText());
             supplierDTO.setLocation(locationField.getText());
             supplierDTO.setPhone(contactField.getText());
-            new Supplier().addSupplierDAO(supplierDTO);
+            supp.addSupplierDAO(supplierDTO);
             loadDataSet();
         }
     }//GEN-LAST:event_addButtonActionPerformed
+
+    private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
+        if (suppTable.getSelectedRow() < 0) {
+            JOptionPane.showMessageDialog(this, "Please select an entry to edit from the table.");
+        } else {
+
+            if (nameField.getText().equals("") || locationField.getText().equals("") || contactField.getText().equals("")) {
+                JOptionPane.showMessageDialog(this, "Please enter all the required details.");
+            } else {
+                SupplierDT supplierDTO = new SupplierDT();
+                Supplier supp = new Supplier();
+                supplierDTO.setSuppID(suppID);
+                supplierDTO.setFullName(nameField.getText());
+                supplierDTO.setLocation(locationField.getText());
+                supplierDTO.setPhone(contactField.getText());
+                supp.editSupplierDAO(supplierDTO);
+                loadDataSet();
+                clear();
+            }
+        }
+    }//GEN-LAST:event_editButtonActionPerformed
+
+    private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
+        clear();
+    }//GEN-LAST:event_clearButtonActionPerformed
+
+    private void searchFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchFieldKeyReleased
+        loadSearchData(searchField.getText());
+    }//GEN-LAST:event_searchFieldKeyReleased
 
     private void suppTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_suppTableMouseClicked
         int row = suppTable.getSelectedRow();
@@ -212,45 +180,12 @@ public class SuppliersFrame extends javax.swing.JPanel {
         contactField.setText((String) data[3]);
     }//GEN-LAST:event_suppTableMouseClicked
 
-    private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
-        if (suppTable.getSelectedRow() < 0)
-            JOptionPane.showMessageDialog(this, "Please select an entry to edit from the table.");
-        else {
-            if (nameField.getText().equals("") || locationField.getText().equals("") || contactField.getText().equals("")) {
-                JOptionPane.showMessageDialog(this, "Please enter all the required details.");
-            } else {
-                SupplierDT supplierDTO = new SupplierDT();
-                supplierDTO.setSuppID(suppID);
-                supplierDTO.setFullName(nameField.getText());
-                supplierDTO.setLocation(locationField.getText());
-                supplierDTO.setPhone(contactField.getText());
-                new Supplier().editSupplierDAO(supplierDTO);
-                loadDataSet();
-            }
-        }
-    }//GEN-LAST:event_editButtonActionPerformed
-
-    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-        if (suppTable.getSelectedRow() < 0)
-            JOptionPane.showMessageDialog(this, "Please select an entry from the table to be deleted.");
-        else {
-            int opt = JOptionPane.showConfirmDialog(
-                    this,
-                    "Are you sure you want to delete this supplier?",
-                    "Confirmation",
-                    JOptionPane.YES_NO_OPTION);
-            if (opt == JOptionPane.YES_OPTION) {
-                new Supplier().deleteSupplierDAO((int) suppTable.getValueAt(suppTable.getSelectedRow(), 0));
-                loadDataSet();
-            }
-        }
-    }//GEN-LAST:event_deleteButtonActionPerformed
-
-    private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
+    public void clear() {
         nameField.setText("");
         locationField.setText("");
         contactField.setText("");
-    }//GEN-LAST:event_clearButtonActionPerformed
+    }
+
     public void loadDataSet() {
         try {
             Supplier supplierDAO = new Supplier();
@@ -260,19 +195,30 @@ public class SuppliersFrame extends javax.swing.JPanel {
         }
     }
 
+    public void loadSearchData(String text) {
+        try {
+            Supplier supplierDAO = new Supplier();
+            suppTable.setModel(supplierDAO.buildTableModel(supplierDAO.getSearchResult(text)));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
     private javax.swing.JButton clearButton;
     private javax.swing.JTextField contactField;
-    private javax.swing.JButton deleteButton;
     private javax.swing.JButton editButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField locationField;
     private javax.swing.JTextField nameField;
+    private javax.swing.JTextField searchField;
     private javax.swing.JTable suppTable;
     // End of variables declaration//GEN-END:variables
 }

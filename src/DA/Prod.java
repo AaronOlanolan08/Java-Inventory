@@ -244,22 +244,15 @@ public class Prod {
     // Method to update existing product details
     public void editProdDAO(ProdDT productDTO) {
         try {
-            String query = "UPDATE products SET productname=?,costprice=?,sellprice=?,brand=? WHERE productcode=?";
+            String query = "UPDATE products SET productname=?,costprice=?,sellprice=?,brand=? WHERE productID=?";
             prep1 = (PreparedStatement) conn.prepareStatement(query);
             prep1.setString(1, productDTO.getProdName());
             prep1.setDouble(2, productDTO.getCostPrice());
             prep1.setDouble(3, productDTO.getSellPrice());
             prep1.setString(4, productDTO.getBrand());
-            prep1.setString(5, productDTO.getProdCode());
-
-            String query2 = "UPDATE currentstock SET quantity=? WHERE productcode=?";
-            prep2 = conn.prepareStatement(query2);
-            prep2.setInt(1, productDTO.getQuantity());
-            prep2.setString(2, productDTO.getProdCode());
-
+            prep1.setString(5, String.valueOf(productDTO.getProdID()));
             prep1.executeUpdate();
-            prep2.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Product details updated.");
+            JOptionPane.showMessageDialog(null, "Edit successful.");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -327,7 +320,7 @@ public class Prod {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        deleteStock();
+        // deleteStock();
     }
 
     public void deletePurchaseDAO(int ID) {
@@ -341,7 +334,7 @@ public class Prod {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        deleteStock();
+        // deleteStock();
     }
 
     public void deleteSaleDAO(int ID) {
@@ -404,9 +397,10 @@ public class Prod {
     // Purchase table data set retrieval
     public ResultSet getPurchaseInfo() {
         try {
-            String query = "SELECT PurchaseID,purchaseinfo.ProductCode,ProductName,Quantity,Totalcost "
-                    + "FROM purchaseinfo INNER JOIN products "
-                    + "ON products.productcode=purchaseinfo.productcode ORDER BY purchaseid;";
+            String query = "SELECT purchaseID,products.productname,suppliers.fullname,date,quantity,totalcost "
+                    + "FROM purchaseinfo INNER JOIN products ON purchaseinfo.productID=products.productID "
+                    + "INNER JOIN suppliers ON purchaseinfo.supplierID=suppliers.supplierID ORDER BY purchaseID";
+
             resultSet = statement.executeQuery(query);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -434,12 +428,11 @@ public class Prod {
     public ResultSet getSalesInfo() {
         try {
             String query = """
-                    SELECT salesid,salesinfo.productcode,productname,
-                    salesinfo.quantity,revenue,users.name AS Sold_by
-                    FROM salesinfo INNER JOIN products
-                    ON salesinfo.productcode=products.productcode
+                    SELECT salesID,products.productname,users.name,
+                    date,quantity,revenue FROM salesinfo INNER JOIN products
+                    ON salesinfo.productID=products.productID
                     INNER JOIN users
-                    ON salesinfo.soldby=users.username;
+                    ON salesinfo.sellerID=users.userID;
                     """;
             resultSet = statement.executeQuery(query);
         } catch (SQLException throwables) {
@@ -451,8 +444,8 @@ public class Prod {
     // Search method for products
     public ResultSet getProductSearch(String text) {
         try {
-            String query = "SELECT productcode,productname,costprice,sellprice,brand FROM products "
-                    + "WHERE productcode LIKE '%" + text + "%' OR productname LIKE '%" + text + "%' OR brand LIKE '%" + text + "%'";
+            String query = "SELECT productID,productname,costprice,sellprice,brand FROM products "
+                    + "WHERE productID LIKE '%" + text + "%' OR productname LIKE '%" + text + "%' OR brand LIKE '%" + text + "%'";
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -471,19 +464,20 @@ public class Prod {
         return resultSet;
     }
 
-    // Search method for sales
+    String query = """
+                    SELECT salesID,products.productname,users.name,
+                    date,quantity,revenue FROM salesinfo INNER JOIN products
+                    ON salesinfo.productID=products.productID
+                    INNER JOIN users ON salesinfo.sellerID=users.userID WHERE ;
+                    """;
+
     public ResultSet getSalesSearch(String text) {
         try {
-            String query = "SELECT salesid,salesinfo.productcode,productname,\n"
-                    + "                    salesinfo.quantity,revenue,users.name AS Sold_by\n"
-                    + "                    FROM salesinfo INNER JOIN products\n"
-                    + "                    ON salesinfo.productcode=products.productcode\n"
-                    + "                    INNER JOIN users\n"
-                    + "                    ON salesinfo.soldby=users.username\n"
-                    + "                    INNER JOIN customers\n"
-                    + "                    ON customers.customercode=salesinfo.customercode\n"
-                    + "WHERE salesinfo.productcode LIKE '%" + text + "%' OR productname LIKE '%" + text + "%' "
-                    + "OR users.name LIKE '%" + text + "%' OR customers.fullname LIKE '%" + text + "%' ORDER BY salesid;";
+            String query = "SELECT salesID,products.productname,users.name,date,quantity,revenue "
+                    + "FROM salesinfo INNER JOIN products ON salesinfo.productID=products.productID "
+                    + "INNER JOIN users ON salesinfo.sellerID=users.userID "
+                    + "WHERE purchaseID LIKE '%" + text + "%' OR productname LIKE '%" + text + "%' "
+                    + "OR users.name LIKE '%" + text + "%' OR date LIKE '%" + text + "%' ORDER BY salesid;";
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -494,12 +488,12 @@ public class Prod {
     // Search method for purchase logs
     public ResultSet getPurchaseSearch(String text) {
         try {
-            String query = "SELECT PurchaseID,purchaseinfo.productcode,products.productname,quantity,totalcost "
-                    + "FROM purchaseinfo INNER JOIN products ON purchaseinfo.productcode=products.productcode "
-                    + "INNER JOIN suppliers ON purchaseinfo.suppliercode=suppliers.suppliercode"
-                    + "WHERE PurchaseID LIKE '%" + text + "%' OR productcode LIKE '%" + text + "%' OR productname LIKE '%" + text + "%' "
-                    + "OR suppliers.fullname LIKE '%" + text + "%' OR purchaseinfo.suppliercode LIKE '%" + text + "%' "
-                    + "OR date LIKE '%" + text + "%' ORDER BY purchaseid";
+            String query = "SELECT purchaseID,products.productname,suppliers.fullname,date,quantity,totalcost "
+                    + "FROM purchaseinfo INNER JOIN products ON purchaseinfo.productID=products.productID "
+                    + "INNER JOIN suppliers ON purchaseinfo.supplierID=suppliers.supplierID"
+                    + "WHERE purchaseID LIKE '%" + text + "%' OR productname LIKE '%" + text + "%' "
+                    + "OR suppliers.fullname LIKE '%" + text + "%' "
+                    + "OR date LIKE '%" + text + "%' ORDER BY purchaseID";
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();

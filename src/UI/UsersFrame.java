@@ -49,6 +49,8 @@ public class UsersFrame extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         userTable = new javax.swing.JTable();
 
+        setBackground(new java.awt.Color(255, 255, 240));
+
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Enter user details"));
 
         jLabel1.setText("Fullname");

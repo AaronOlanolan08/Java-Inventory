@@ -8,10 +8,15 @@ import DA.Prod;
 import java.sql.*;
 import javax.swing.JOptionPane;
 
-public class PRecordsFrame extends javax.swing.JPanel {
+/**
+ *
+ * @author New User
+ */
+public class SRecordsFrame extends javax.swing.JPanel {
 
     Home home;
-    public PRecordsFrame(Home home) {
+
+    public SRecordsFrame(Home home) {
         initComponents();
         this.home = home;
         loadDataSet();
@@ -27,15 +32,15 @@ public class PRecordsFrame extends javax.swing.JPanel {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        pRecordsTable = new javax.swing.JTable();
+        sRecordsTable = new javax.swing.JTable();
+        purchaseButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
-        salesButton = new javax.swing.JButton();
         searchField = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        pRecordsTable.setModel(new javax.swing.table.DefaultTableModel(
+        sRecordsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -46,14 +51,17 @@ public class PRecordsFrame extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        pRecordsTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                pRecordsTableMouseClicked(evt);
+        jScrollPane1.setViewportView(sRecordsTable);
+
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 98, 888, 406));
+
+        purchaseButton.setText("Purchase Records");
+        purchaseButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                purchaseButtonActionPerformed(evt);
             }
         });
-        jScrollPane1.setViewportView(pRecordsTable);
-
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(4, 99, 890, 430));
+        add(purchaseButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(771, 69, -1, -1));
 
         deleteButton.setText("Delete");
         deleteButton.addActionListener(new java.awt.event.ActionListener() {
@@ -61,75 +69,62 @@ public class PRecordsFrame extends javax.swing.JPanel {
                 deleteButtonActionPerformed(evt);
             }
         });
-        add(deleteButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 70, -1, -1));
-
-        salesButton.setText("Sales Records");
-        salesButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                salesButtonActionPerformed(evt);
-            }
-        });
-        add(salesButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 70, -1, -1));
+        add(deleteButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(574, 69, -1, -1));
 
         searchField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 searchFieldKeyReleased(evt);
             }
         });
-        add(searchField, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 70, 110, -1));
+        add(searchField, new org.netbeans.lib.awtextra.AbsoluteConstraints(329, 69, 111, -1));
 
         jLabel1.setText("Search:");
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 70, -1, 20));
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(285, 69, -1, 23));
     }// </editor-fold>//GEN-END:initComponents
+
+    private void purchaseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_purchaseButtonActionPerformed
+        home.addPRecordsFrame();
+    }//GEN-LAST:event_purchaseButtonActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         Prod delrecord = new Prod();
-        if (pRecordsTable.getSelectedRow() < 0)
-            JOptionPane.showMessageDialog(null, "Please select a transaction from the table.");
+        if (sRecordsTable.getSelectedRow() < 0)
+            JOptionPane.showMessageDialog(this, "Please select an entry from the table you wish to delete.");
         else {
             int opt = JOptionPane.showConfirmDialog(
-                    null,
-                    "Are you sure you want to delete this purchase?",
+                    this,
+                    "Are you sure you want to delete this sale from the database?",
                     "Confirmation",
                     JOptionPane.YES_NO_OPTION);
             if (opt == JOptionPane.YES_OPTION) {
-                delrecord.deletePurchaseDAO((int) pRecordsTable.getValueAt(pRecordsTable.getSelectedRow(), 0));
-                // new ProductDAO().editPurchaseStock(prodCode, quantity);
+                delrecord.deleteSaleDAO(Integer.parseInt(
+                        sRecordsTable.getValueAt(sRecordsTable.getSelectedRow(), 0).toString()));
+//                new ProductDAO().editSoldStock(
+//                        salesTable.getValueAt(salesTable.getSelectedRow(), 1).toString(), quantity);
                 loadDataSet();
             }
         }
     }//GEN-LAST:event_deleteButtonActionPerformed
 
-    private void pRecordsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pRecordsTableMouseClicked
-        int row = pRecordsTable.getSelectedRow();
-        int col = pRecordsTable.getColumnCount();
-        Object[] data = new Object[col];
-
-        for (int i = 0; i < col; i++)
-            data[i] = pRecordsTable.getValueAt(row, i);
-    }//GEN-LAST:event_pRecordsTableMouseClicked
-
-    private void salesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salesButtonActionPerformed
-        home.addSalesRecordsFrame();
-    }//GEN-LAST:event_salesButtonActionPerformed
-
     private void searchFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchFieldKeyReleased
         loadSearchData(searchField.getText());
     }//GEN-LAST:event_searchFieldKeyReleased
 
+
     public void loadDataSet() {
         try {
-            Prod purchase = new Prod();
-            pRecordsTable.setModel(purchase.buildTableModel(purchase.getPurchaseInfo()));
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            Prod productDAO = new Prod();
+            sRecordsTable.setModel(productDAO.buildTableModel(productDAO.getSalesInfo()));
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
+    // Method to display search result in table
     public void loadSearchData(String text) {
         try {
             Prod productDAO = new Prod();
-             pRecordsTable.setModel(productDAO.buildTableModel(productDAO.getPurchaseSearch(text)));
+            sRecordsTable.setModel(productDAO.buildTableModel(productDAO.getSalesSearch(text)));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -139,8 +134,8 @@ public class PRecordsFrame extends javax.swing.JPanel {
     private javax.swing.JButton deleteButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable pRecordsTable;
-    private javax.swing.JButton salesButton;
+    private javax.swing.JButton purchaseButton;
+    private javax.swing.JTable sRecordsTable;
     private javax.swing.JTextField searchField;
     // End of variables declaration//GEN-END:variables
 }
