@@ -94,9 +94,9 @@ public class Supplier {
     // Supplier data set retrieval method
     public ResultSet getQueryResult() {
         try {
-            String query = "SELECT * FROM suppliers";
+            String query = "SELECT supplierID,fullname,location,contact FROM suppliers";
             resultSet = statement.executeQuery(query);
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return resultSet;
@@ -105,9 +105,9 @@ public class Supplier {
     // Search method
     public ResultSet getSearchResult(String searchText) {
         try {
-            String query = "SELECT suppliercode, fullname, location, mobile FROM suppliers "
-                    + "WHERE suppliercode LIKE '%" + searchText + "%' OR location LIKE '%" + searchText + "%' "
-                    + "OR fullname LIKE '%" + searchText + "%' OR mobile LIKE '%" + searchText + "%'";
+            String query = "SELECT supplierID, fullname, location, contact FROM suppliers "
+                    + "WHERE supplierID LIKE '%" + searchText + "%' OR location LIKE '%" + searchText + "%' "
+                    + "OR fullname LIKE '%" + searchText + "%' OR contact LIKE '%" + searchText + "%'";
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();

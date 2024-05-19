@@ -21,6 +21,7 @@ public class ProductsFrame extends javax.swing.JPanel {
 
     ProdDT prod;
     Prod prd;
+    int prodID;
 
     /**
      * Creates new form ProductsFrame
@@ -69,6 +70,7 @@ public class ProductsFrame extends javax.swing.JPanel {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         productTable = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         suppCbox = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
@@ -87,6 +89,11 @@ public class ProductsFrame extends javax.swing.JPanel {
         jLabel7 = new javax.swing.JLabel();
         restockButton = new javax.swing.JButton();
         clearButton = new javax.swing.JButton();
+        editButton = new javax.swing.JButton();
+        searchField = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         productTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -113,25 +120,37 @@ public class ProductsFrame extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(productTable);
-        if (productTable.getColumnModel().getColumnCount() > 0) {
-            productTable.getColumnModel().getColumn(0).setResizable(false);
-        }
+
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 37, 622, 466));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Enter Product Details"));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         suppCbox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel1.add(suppCbox, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, 101, -1));
 
         jLabel1.setText("Select Supplier:");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, -1, 22));
 
         jLabel2.setText("Product Name:");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, -1, -1));
+        jPanel1.add(nameField, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, 199, -1));
 
         jLabel3.setText("Cost Price:");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, -1, -1));
 
         jLabel4.setText("Sell Price:");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, -1, -1));
 
         jLabel5.setText("Brand:");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 290, -1, -1));
 
         jLabel6.setText("Quantity:");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, -1, -1));
+        jPanel1.add(quantityField, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 200, -1));
+        jPanel1.add(costField, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 210, 200, -1));
+        jPanel1.add(sellField, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, 200, -1));
+        jPanel1.add(brandField, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 310, 200, -1));
 
         addButton.setText("Add");
         addButton.addActionListener(new java.awt.event.ActionListener() {
@@ -139,8 +158,11 @@ public class ProductsFrame extends javax.swing.JPanel {
                 addButtonActionPerformed(evt);
             }
         });
+        jPanel1.add(addButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 420, 60, -1));
+        jPanel1.add(jDateChooser1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, 200, -1));
 
         jLabel7.setText("Date:");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 340, -1, -1));
 
         restockButton.setText("Restock");
         restockButton.setEnabled(false);
@@ -149,6 +171,7 @@ public class ProductsFrame extends javax.swing.JPanel {
                 restockButtonActionPerformed(evt);
             }
         });
+        jPanel1.add(restockButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 420, 80, -1));
 
         clearButton.setText("Clear");
         clearButton.addActionListener(new java.awt.event.ActionListener() {
@@ -156,100 +179,30 @@ public class ProductsFrame extends javax.swing.JPanel {
                 clearButtonActionPerformed(evt);
             }
         });
+        jPanel1.add(clearButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 420, 60, -1));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(33, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel7))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(suppCbox, 0, 101, Short.MAX_VALUE)
-                                .addComponent(nameField)
-                                .addComponent(quantityField)
-                                .addComponent(costField)
-                                .addComponent(sellField)
-                                .addComponent(brandField))
-                            .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(addButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(restockButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(clearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)))
-                .addGap(35, 35, 35))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(75, 75, 75)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(suppCbox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
-                    .addComponent(quantityField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(costField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(sellField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
-                    .addComponent(brandField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
-                .addGap(21, 21, 21)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(addButton)
-                    .addComponent(restockButton)
-                    .addComponent(clearButton))
-                .addContainerGap(91, Short.MAX_VALUE))
-        );
+        editButton.setText("Edit");
+        editButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editButtonActionPerformed(evt);
+            }
+        });
+        jPanel1.add(editButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 30, 60, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 519, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        jScrollPane2.setViewportView(jPanel1);
+        jPanel1.getAccessibleContext().setAccessibleParent(this);
+
+        add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(634, 37, 260, 466));
+
+        searchField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                searchFieldKeyReleased(evt);
+            }
+        });
+        add(searchField, new org.netbeans.lib.awtextra.AbsoluteConstraints(497, 9, 131, -1));
+
+        jLabel8.setText("Search:");
+        add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(453, 12, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
@@ -312,6 +265,7 @@ public class ProductsFrame extends javax.swing.JPanel {
             for (int i = 0; i < col; i++) {
                 data[i] = productTable.getValueAt(row, i);
             }
+            prodID = (Integer) data[0];
             nameField.setText((String) data[1]);
             Double costValue = (Double) data[2];
             costField.setText(String.valueOf(costValue));
@@ -319,9 +273,11 @@ public class ProductsFrame extends javax.swing.JPanel {
             sellField.setText(String.valueOf(sellValue));
             brandField.setText((String) data[4]);
             restockButton.setEnabled(true);
+        } else {
+            productTable.clearSelection();
+            clear();
         }
 
-        // Toggle the tableClicked variable
         tableClicked = !tableClicked;
     }//GEN-LAST:event_productTableMouseClicked
 
@@ -329,63 +285,70 @@ public class ProductsFrame extends javax.swing.JPanel {
         prod = new ProdDT();
         prd = new Prod();
         String userInput = JOptionPane.showInputDialog(null, "Enter the quantity of the product:");
+        if (userInput == null) {
+            return;
+        }
+        boolean validInput = false;
+
         try {
             int quantity = Integer.parseInt(userInput);
             prod.setQuantity(quantity + prd.getStock(nameField.getText()));
             prod.setRestock(quantity);
+            validInput = true;
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Invalid input! Please enter a valid number.");
         }
-        try {
-            Supplier supplierDAO = new Supplier();
-            JComboBox<String> suppCbox = new JComboBox<>(supplierDAO.setComboItems(supplierDAO.getQueryResult()));
 
-            int choice = JOptionPane.showOptionDialog(
-                    null,
-                    suppCbox,
-                    "Select a Supplier",
-                    JOptionPane.OK_CANCEL_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    null,
-                    null
-            );
+        if (validInput) {
+            try {
+                Supplier supplierDAO = new Supplier();
+                JComboBox<String> suppCbox = new JComboBox<>(supplierDAO.setComboItems(supplierDAO.getQueryResult()));
 
-            if (choice == JOptionPane.OK_OPTION) {
+                int choice = JOptionPane.showOptionDialog(
+                        null,
+                        suppCbox,
+                        "Select a Supplier",
+                        JOptionPane.OK_CANCEL_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        null,
+                        null
+                );
 
-                String selectedSupplier = (String) suppCbox.getSelectedItem();
-                prod.setSuppName(selectedSupplier);
-                String name = prod.getSuppName();
-                String id = prd.getSuppID(name);
-                prod.setSuppID(Integer.parseInt(id));
+                if (choice == JOptionPane.OK_OPTION) {
+                    String selectedSupplier = (String) suppCbox.getSelectedItem();
+                    prod.setSuppName(selectedSupplier);
+                    String name = prod.getSuppName();
+                    String id = prd.getSuppID(name);
+                    prod.setSuppID(Integer.parseInt(id));
 
-                String pid = prd.getProdID(nameField.getText());
-                prod.setProdID(Integer.parseInt(pid));
+                    String pid = prd.getProdID(nameField.getText());
+                    prod.setProdID(Integer.parseInt(pid));
 
-                ZonedDateTime currentDateTime = ZonedDateTime.now();
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E MMM dd HH:mm:ss z yyyy");
-                String formattedDateTime = currentDateTime.format(formatter);
-                prod.setDate(formattedDateTime);
+                    ZonedDateTime currentDateTime = ZonedDateTime.now();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E MMM dd HH:mm:ss z yyyy");
+                    String formattedDateTime = currentDateTime.format(formatter);
+                    prod.setDate(formattedDateTime);
 
-                Double costPrice = Double.valueOf(costField.getText());
-                Double totalCost = costPrice * prod.getRestock();
-                prod.setTotalCost(totalCost);
+                    Double costPrice = Double.valueOf(costField.getText());
+                    Double totalCost = costPrice * prod.getRestock();
+                    prod.setTotalCost(totalCost);
 
-                prd.addRestockPurchase(prod);
+                    prd.addRestockPurchase(prod);
 
-                prod.setProdName(nameField.getText());
-                prod.setCostPrice(Double.parseDouble(costField.getText()));
-                prod.setSellPrice(Double.parseDouble(sellField.getText()));
-                prod.setBrand(brandField.getText());
-                prd.addRestock(prod);
+                    prod.setProdName(nameField.getText());
+                    prod.setCostPrice(Double.parseDouble(costField.getText()));
+                    prod.setSellPrice(Double.parseDouble(sellField.getText()));
+                    prod.setBrand(brandField.getText());
+                    prd.addRestock(prod);
 
-                loadDataSet();
-                restockButton.setEnabled(false);
-                clear();
-
+                    loadDataSet();
+                    restockButton.setEnabled(false);
+                    clear();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }//GEN-LAST:event_restockButtonActionPerformed
 
@@ -402,12 +365,40 @@ public class ProductsFrame extends javax.swing.JPanel {
         clear();
     }//GEN-LAST:event_clearButtonActionPerformed
 
+    private void searchFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchFieldKeyReleased
+        loadSearchData(searchField.getText());
+    }//GEN-LAST:event_searchFieldKeyReleased
+
+    private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
+        if (productTable.getSelectedRow() < 0) {
+            JOptionPane.showMessageDialog(this, "Please select an entry to edit from the table.");
+        } else {
+
+            if (nameField.getText().equals("") || costField.getText().equals("") || sellField.getText().equals("")
+                    || brandField.getText().equals("")) {
+                JOptionPane.showMessageDialog(this, "Please enter all the required details.");
+            } else {
+                Prod prodedit = new Prod();
+                ProdDT newprod = new ProdDT();
+                newprod.setProdID(prodID);
+                newprod.setProdName(nameField.getText());
+                newprod.setCostPrice(Double.parseDouble(costField.getText()));
+                newprod.setSellPrice(Double.parseDouble(sellField.getText()));
+                newprod.setBrand(brandField.getText());
+                prodedit.editProdDAO(newprod);
+                loadDataSet();
+                clear();
+            }
+        }
+    }//GEN-LAST:event_editButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
     private javax.swing.JTextField brandField;
     private javax.swing.JButton clearButton;
     private javax.swing.JTextField costField;
+    private javax.swing.JButton editButton;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -416,12 +407,15 @@ public class ProductsFrame extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField nameField;
     private javax.swing.JTable productTable;
     private javax.swing.JTextField quantityField;
     private javax.swing.JButton restockButton;
+    private javax.swing.JTextField searchField;
     private javax.swing.JTextField sellField;
     private javax.swing.JComboBox<String> suppCbox;
     // End of variables declaration//GEN-END:variables
