@@ -26,6 +26,7 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
         user = new UsersDT();
+        setResizable(false);
     }
 
     /**
@@ -45,6 +46,12 @@ public class Login extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         loginPanel = new javax.swing.JPanel();
         loginLabel = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -60,23 +67,21 @@ public class Login extends javax.swing.JFrame {
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 100, 280, 76));
 
         userText.setBackground(new java.awt.Color(233, 220, 201));
-        userText.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-        userText.setText("Username");
+        userText.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         userText.setBorder(null);
-        userText.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                userTextFocusGained(evt);
+        userText.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                userTextKeyTyped(evt);
             }
         });
         jPanel1.add(userText, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 270, 180, 30));
 
         passText.setBackground(new java.awt.Color(233, 220, 201));
-        passText.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-        passText.setText("Password");
+        passText.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         passText.setBorder(null);
-        passText.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                passTextFocusGained(evt);
+        passText.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                passTextKeyTyped(evt);
             }
         });
         jPanel1.add(passText, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 340, 180, 30));
@@ -101,28 +106,40 @@ public class Login extends javax.swing.JFrame {
                 loginPanelMousePressed(evt);
             }
         });
+        loginPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         loginLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         loginLabel.setText("LOGIN");
+        loginPanel.add(loginLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(7, 7, 86, -1));
 
-        javax.swing.GroupLayout loginPanelLayout = new javax.swing.GroupLayout(loginPanel);
-        loginPanel.setLayout(loginPanelLayout);
-        loginPanelLayout.setHorizontalGroup(
-            loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, loginPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(loginLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        loginPanelLayout.setVerticalGroup(
-            loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(loginPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(loginLabel)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        jPanel1.add(loginPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 410, 100, 30));
 
-        jPanel1.add(loginPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 410, 50, 30));
+        jPanel3.setBackground(new java.awt.Color(233, 220, 201));
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel2.setText("<HTML><U>Create new account</U></HTML>");
+        jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jLabel2MousePressed(evt);
+            }
+        });
+        jPanel3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(19, 9, -1, 25));
+
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 480, 140, 40));
+
+        jLabel3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel3.setText("Username");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 250, -1, -1));
+
+        jLabel5.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel5.setText("Password");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(188, 320, 70, -1));
+
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-userlogin-32.png"))); // NOI18N
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 280, -1, 20));
+
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-password-24.png"))); // NOI18N
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 350, -1, -1));
 
         jPanel2.setBackground(new java.awt.Color(50, 57, 61));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -174,28 +191,41 @@ public class Login extends javax.swing.JFrame {
 
     private void loginPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginPanelMouseEntered
         setColor(loginPanel);
-        
+
     }//GEN-LAST:event_loginPanelMouseEntered
 
     private void loginPanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginPanelMouseExited
         resetColor(loginPanel);
     }//GEN-LAST:event_loginPanelMouseExited
 
-    private void userTextFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_userTextFocusGained
-        userText.setText("");
-    }//GEN-LAST:event_userTextFocusGained
+    private void jLabel2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MousePressed
+        this.dispose();
 
-    private void passTextFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_passTextFocusGained
-        passText.setText("");
-    }//GEN-LAST:event_passTextFocusGained
+        SignUpFrame signupFrame = new SignUpFrame();
+        signupFrame.setVisible(true);
+    }//GEN-LAST:event_jLabel2MousePressed
 
-    void setColor(JPanel panel) {
+    private void userTextKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_userTextKeyTyped
+        if (userText.getText().length() >= 20) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_userTextKeyTyped
+
+    private void passTextKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passTextKeyTyped
+        if (passText.getText().length() >= 200) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_passTextKeyTyped
+
+    void setColor(JPanel panel
+    ) {
         panel.setBackground(new Color(50, 57, 61));
         loginLabel.setForeground(Color.WHITE);
-        
+
     }
 
-    void resetColor(JPanel panel) {
+    void resetColor(JPanel panel
+    ) {
         panel.setBackground(new Color(233, 220, 201));
         loginLabel.setForeground(Color.BLACK);
     }
@@ -237,10 +267,16 @@ public class Login extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JLabel loginLabel;

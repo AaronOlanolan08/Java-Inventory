@@ -49,7 +49,9 @@ public class SuppliersFrame extends javax.swing.JPanel {
         clearButton = new javax.swing.JButton();
         searchField = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
 
+        setBackground(new java.awt.Color(233, 220, 201));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         suppTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -73,16 +75,34 @@ public class SuppliersFrame extends javax.swing.JPanel {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setText("Supplier Name:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, -1, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 110, -1, -1));
 
         jLabel2.setText("Location:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, -1, -1));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 170, -1, -1));
 
         jLabel3.setText("Contact:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(32, 239, -1, -1));
-        jPanel1.add(nameField, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 170, -1));
-        jPanel1.add(locationField, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, 170, -1));
-        jPanel1.add(contactField, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, 170, -1));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 240, -1, -1));
+
+        nameField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                nameFieldKeyTyped(evt);
+            }
+        });
+        jPanel1.add(nameField, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, 170, -1));
+
+        locationField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                locationFieldKeyTyped(evt);
+            }
+        });
+        jPanel1.add(locationField, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 200, 170, -1));
+
+        contactField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                contactFieldKeyTyped(evt);
+            }
+        });
+        jPanel1.add(contactField, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 270, 170, -1));
 
         addButton.setText("Add");
         addButton.addActionListener(new java.awt.event.ActionListener() {
@@ -90,7 +110,7 @@ public class SuppliersFrame extends javax.swing.JPanel {
                 addButtonActionPerformed(evt);
             }
         });
-        jPanel1.add(addButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 340, -1, -1));
+        jPanel1.add(addButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 340, -1, -1));
 
         editButton.setText("Edit");
         editButton.addActionListener(new java.awt.event.ActionListener() {
@@ -106,7 +126,7 @@ public class SuppliersFrame extends javax.swing.JPanel {
                 clearButtonActionPerformed(evt);
             }
         });
-        jPanel1.add(clearButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 340, -1, -1));
+        jPanel1.add(clearButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 340, -1, -1));
 
         jScrollPane1.setViewportView(jPanel1);
 
@@ -116,11 +136,20 @@ public class SuppliersFrame extends javax.swing.JPanel {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 searchFieldKeyReleased(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                searchFieldKeyTyped(evt);
+            }
         });
         add(searchField, new org.netbeans.lib.awtextra.AbsoluteConstraints(497, 8, 131, -1));
 
         jLabel4.setText("Search:");
         add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(453, 11, -1, -1));
+
+        jLabel5.setBackground(new java.awt.Color(50, 57, 61));
+        jLabel5.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setText("SUPPLIERS");
+        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 110, 30));
     }// </editor-fold>//GEN-END:initComponents
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
@@ -134,6 +163,7 @@ public class SuppliersFrame extends javax.swing.JPanel {
             supplierDTO.setPhone(contactField.getText());
             supp.addSupplierDAO(supplierDTO);
             loadDataSet();
+            clear();
         }
     }//GEN-LAST:event_addButtonActionPerformed
 
@@ -165,20 +195,61 @@ public class SuppliersFrame extends javax.swing.JPanel {
     private void searchFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchFieldKeyReleased
         loadSearchData(searchField.getText());
     }//GEN-LAST:event_searchFieldKeyReleased
-
+    private boolean tableClicked = false;
     private void suppTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_suppTableMouseClicked
-        int row = suppTable.getSelectedRow();
-        int col = suppTable.getColumnCount();
-        Object[] data = new Object[col];
+        if (!tableClicked) {
+            int row = suppTable.getSelectedRow();
+            int col = suppTable.getColumnCount();
+            Object[] data = new Object[col];
 
-        for (int i = 0; i < col; i++) {
-            data[i] = suppTable.getValueAt(row, i);
+            for (int i = 0; i < col; i++) {
+                data[i] = suppTable.getValueAt(row, i);
+            }
+            suppID = (int) data[0];
+            nameField.setText((String) data[1]);
+            locationField.setText((String) data[2]);
+            contactField.setText((String) data[3]);
+        } else {
+            suppTable.clearSelection();
+            clear();
         }
-        suppID = (int) data[0];
-        nameField.setText((String) data[1]);
-        locationField.setText((String) data[2]);
-        contactField.setText((String) data[3]);
+        tableClicked = !tableClicked;
     }//GEN-LAST:event_suppTableMouseClicked
+
+    private void searchFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchFieldKeyTyped
+        if (searchField.getText().length() >= 45) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_searchFieldKeyTyped
+
+    private void nameFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nameFieldKeyTyped
+        if (nameField.getText().length() >= 45) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_nameFieldKeyTyped
+
+    private void locationFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_locationFieldKeyTyped
+        if (locationField.getText().length() >= 45) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_locationFieldKeyTyped
+
+    private void contactFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_contactFieldKeyTyped
+        char c = evt.getKeyChar();
+        String text = contactField.getText();
+
+        // Check if the input character is a digit
+        if (!Character.isDigit(c)) {
+            evt.consume(); // Ignore the event if it's not a digit
+            return;
+        }
+
+        // Limit to 5 characters
+        if (text.length() >= 11) {
+            evt.consume(); // Ignore the event if there are already 5 characters
+            return;
+        }
+    }//GEN-LAST:event_contactFieldKeyTyped
 
     public void clear() {
         nameField.setText("");
@@ -189,7 +260,9 @@ public class SuppliersFrame extends javax.swing.JPanel {
     public void loadDataSet() {
         try {
             Supplier supplierDAO = new Supplier();
-            suppTable.setModel(supplierDAO.buildTableModel(supplierDAO.getQueryResult()));
+            String[] customColumnNames = {"Supplier ID", "Full Name", "Location", "Contact"};
+            suppTable.setDefaultEditor(Object.class, null);
+            suppTable.setModel(supplierDAO.buildTableModel(supplierDAO.getQueryResult(), customColumnNames));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -198,7 +271,9 @@ public class SuppliersFrame extends javax.swing.JPanel {
     public void loadSearchData(String text) {
         try {
             Supplier supplierDAO = new Supplier();
-            suppTable.setModel(supplierDAO.buildTableModel(supplierDAO.getSearchResult(text)));
+            String[] customColumnNames = {"Supplier ID", "Full Name", "Location", "Contact"};
+            suppTable.setDefaultEditor(Object.class, null);
+            suppTable.setModel(supplierDAO.buildTableModel(supplierDAO.getSearchResult(text), customColumnNames));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -213,6 +288,7 @@ public class SuppliersFrame extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

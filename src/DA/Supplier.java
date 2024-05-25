@@ -67,7 +67,7 @@ public class Supplier {
     public void editSupplierDAO(SupplierDT supplierDTO) {
         try {
             String query = "UPDATE suppliers SET fullname=?,location=?,contact=? WHERE supplierID=?";
-            
+
             prepStatement = conn.prepareStatement(query);
             prepStatement.setString(1, supplierDTO.getFullName());
             prepStatement.setString(2, supplierDTO.getLocation());
@@ -94,7 +94,8 @@ public class Supplier {
     // Supplier data set retrieval method
     public ResultSet getQueryResult() {
         try {
-            String query = "SELECT supplierID,fullname,location,contact FROM suppliers";
+            String query = "SELECT supplierID,fullname,location,contact FROM suppliers "
+                    + "ORDER BY supplierID DESC";
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -125,18 +126,18 @@ public class Supplier {
     }
 
     // Method to display retrieved data set in tabular form
-    public DefaultTableModel buildTableModel(ResultSet resultSet) throws SQLException {
+    public DefaultTableModel buildTableModel(ResultSet resultSet, String[] customColumnNames) throws SQLException {
         ResultSetMetaData metaData = resultSet.getMetaData();
-        Vector<String> columnNames = new Vector<String>();
         int colCount = metaData.getColumnCount();
 
+        Vector<String> columnNames = new Vector<>();
         for (int col = 1; col <= colCount; col++) {
-            columnNames.add(metaData.getColumnName(col).toUpperCase(Locale.ROOT));
+            columnNames.add(customColumnNames[col - 1]); // Use custom column names provided
         }
 
-        Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+        Vector<Vector<Object>> data = new Vector<>();
         while (resultSet.next()) {
-            Vector<Object> vector = new Vector<Object>();
+            Vector<Object> vector = new Vector<>();
             for (int col = 1; col <= colCount; col++) {
                 vector.add(resultSet.getObject(col));
             }

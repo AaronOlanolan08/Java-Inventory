@@ -30,32 +30,33 @@ public class Home extends javax.swing.JFrame {
         layout = new CardLayout();
         this.username = username;
         this.user = user;
-
-        // currentUserSession();
+        new Users().getFullName(user, username);
+        jLabel1.setText("USER :" + user.getFullName() + "");
+        
         // Panel Layout set to Card Layout to allow switching between different sections
         displayPanel.setLayout(layout);
         displayPanel.add("Home", new Welcome(username));
-        displayPanel.add("Users", new UsersFrame());
+        displayPanel.add("Users", new UsersFrame(this));
         displayPanel.add("Products", new ProductsFrame());
         displayPanel.add("Suppliers", new SuppliersFrame());
         displayPanel.add("Purchase Order", new OrdersFrame(username));
         displayPanel.add("Purchase Records", new PRecordsFrame(this));
         displayPanel.add("Sales Records", new SRecordsFrame(this));
-//        displayPanel.add("Logs", new UserLogsPage());
-
+        displayPanel.add("Logs", new LogsFrame(this));
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 outTime = LocalDateTime.now();
                 user.setOutTime(String.valueOf(outTime));
                 user.setUsername(username);
-//                new Users().addUserLogin(user);
+                new Users().addUserLogin(user);
                 super.windowClosing(e);
             }
         });
 
         setTitle("Inventory Manager");
         setVisible(true);
+        setResizable(false);
     }
 
     // Methods to display different sections in the mainframe
@@ -87,16 +88,16 @@ public class Home extends javax.swing.JFrame {
         layout.show(displayPanel, "Purchase Records");
     }
 
-    public void addLogsPage() {
+    public void addLogsFrame() {
         layout.show(displayPanel, "Logs");
     }
 
     void setColor(JPanel panel) {
-        panel.setBackground(new Color(51, 51, 51));
+        panel.setBackground(new Color(233, 220, 201));
     }
 
     void resetColor(JPanel panel) {
-        panel.setBackground(new Color(50,57, 61));
+        panel.setBackground(new Color(50, 57, 61));
     }
 
     /**
@@ -112,23 +113,35 @@ public class Home extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         menuPanel = new javax.swing.JPanel();
         suppPanel = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        prodPanel = new javax.swing.JPanel();
+        suppliersLabel = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        prodPanel = new javax.swing.JPanel();
+        productsLabel = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
         orderPanel = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
+        orderLabel = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
         purchaseInfoRecordsPanel = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
+        recordsLabel = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
         usersPanel = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
-        userLogsPanel = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
+        usersLabel = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
         homePanel = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
+        homeLabel = new javax.swing.JLabel();
+        logoutPanel = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        logoutLabel = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
         displayPanel = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(233, 220, 201));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         menuPanel.setBackground(new java.awt.Color(50, 57, 61));
@@ -148,13 +161,16 @@ public class Home extends javax.swing.JFrame {
         });
         suppPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Suppliers");
-        suppPanel.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(47, 5, 60, -1));
+        suppliersLabel.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
+        suppliersLabel.setForeground(new java.awt.Color(255, 255, 255));
+        suppliersLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        suppliersLabel.setText("Suppliers");
+        suppPanel.add(suppliersLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, 60, 20));
 
-        menuPanel.add(suppPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 150, -1));
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-supplier-50.png"))); // NOI18N
+        suppPanel.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 0, 20, 30));
+
+        menuPanel.add(suppPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 160, 40));
 
         prodPanel.setBackground(new java.awt.Color(50, 57, 61));
         prodPanel.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -170,13 +186,16 @@ public class Home extends javax.swing.JFrame {
         });
         prodPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel2.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Products");
-        prodPanel.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(46, 5, 60, -1));
+        productsLabel.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
+        productsLabel.setForeground(new java.awt.Color(255, 255, 255));
+        productsLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        productsLabel.setText("Products");
+        prodPanel.add(productsLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 10, 80, 20));
 
-        menuPanel.add(prodPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 150, -1));
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-footwear-20.png"))); // NOI18N
+        prodPanel.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 0, 20, 30));
+
+        menuPanel.add(prodPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 200, 160, 40));
 
         orderPanel.setBackground(new java.awt.Color(50, 57, 61));
         orderPanel.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -192,13 +211,16 @@ public class Home extends javax.swing.JFrame {
         });
         orderPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel3.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("Purchase Order");
-        orderPanel.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(29, 5, -1, -1));
+        orderLabel.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
+        orderLabel.setForeground(new java.awt.Color(255, 255, 255));
+        orderLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        orderLabel.setText("Order");
+        orderPanel.add(orderLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 0, 70, 30));
 
-        menuPanel.add(orderPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 210, 150, -1));
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-order-50.png"))); // NOI18N
+        orderPanel.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 0, -1, -1));
+
+        menuPanel.add(orderPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, 160, 30));
 
         purchaseInfoRecordsPanel.setBackground(new java.awt.Color(50, 57, 61));
         purchaseInfoRecordsPanel.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -214,13 +236,16 @@ public class Home extends javax.swing.JFrame {
         });
         purchaseInfoRecordsPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel5.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("Records");
-        purchaseInfoRecordsPanel.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(29, 5, 90, -1));
+        recordsLabel.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
+        recordsLabel.setForeground(new java.awt.Color(255, 255, 255));
+        recordsLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        recordsLabel.setText("Records");
+        purchaseInfoRecordsPanel.add(recordsLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 0, 80, 40));
 
-        menuPanel.add(purchaseInfoRecordsPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 240, 150, -1));
+        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-records-50.png"))); // NOI18N
+        purchaseInfoRecordsPanel.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 0, 20, 30));
+
+        menuPanel.add(purchaseInfoRecordsPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 290, 160, 40));
 
         usersPanel.setBackground(new java.awt.Color(50, 57, 61));
         usersPanel.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -236,35 +261,16 @@ public class Home extends javax.swing.JFrame {
         });
         usersPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel6.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("Users");
-        usersPanel.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(48, 5, 50, -1));
+        usersLabel.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
+        usersLabel.setForeground(new java.awt.Color(255, 255, 255));
+        usersLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        usersLabel.setText("Users");
+        usersPanel.add(usersLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 10, 70, 20));
 
-        menuPanel.add(usersPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 270, 150, -1));
+        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-user-32.png"))); // NOI18N
+        usersPanel.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 0, -1, 30));
 
-        userLogsPanel.setBackground(new java.awt.Color(50, 57, 61));
-        userLogsPanel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                userLogsPanelMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                userLogsPanelMouseExited(evt);
-            }
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                userLogsPanelMousePressed(evt);
-            }
-        });
-        userLogsPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel7.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setText("User Logs");
-        userLogsPanel.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(46, 5, -1, -1));
-
-        menuPanel.add(userLogsPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 330, 150, -1));
+        menuPanel.add(usersPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 330, 160, 40));
 
         homePanel.setBackground(new java.awt.Color(50, 57, 61));
         homePanel.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -274,23 +280,84 @@ public class Home extends javax.swing.JFrame {
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 homePanelMouseExited(evt);
             }
-        });
-        homePanel.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                homePanelKeyPressed(evt);
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                homePanelMousePressed(evt);
             }
         });
-        homePanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-home-24.png"))); // NOI18N
-        homePanel.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 0, 30, 30));
 
-        menuPanel.add(homePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 140, 30));
+        homeLabel.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
+        homeLabel.setForeground(new java.awt.Color(255, 255, 255));
+        homeLabel.setText("Home");
+
+        javax.swing.GroupLayout homePanelLayout = new javax.swing.GroupLayout(homePanel);
+        homePanel.setLayout(homePanelLayout);
+        homePanelLayout.setHorizontalGroup(
+            homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(homePanelLayout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(homeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        homePanelLayout.setVerticalGroup(
+            homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(homePanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(homePanelLayout.createSequentialGroup()
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addComponent(homeLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)))
+        );
+
+        menuPanel.add(homePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 110, 160, 30));
+
+        logoutPanel.setBackground(new java.awt.Color(50, 57, 61));
+        logoutPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                logoutPanelMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                logoutPanelMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                logoutPanelMousePressed(evt);
+            }
+        });
+        logoutPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-logout-50.png"))); // NOI18N
+        logoutPanel.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, -1, 30));
+
+        logoutLabel.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
+        logoutLabel.setForeground(new java.awt.Color(255, 255, 255));
+        logoutLabel.setText("Log out");
+        logoutPanel.add(logoutLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 10, -1, 20));
+
+        menuPanel.add(logoutPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 490, 160, 40));
+
+        jPanel2.setBackground(new java.awt.Color(50, 57, 61));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-footwear-50.png"))); // NOI18N
+        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(44, 13, 80, 30));
+
+        jLabel14.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
+        jLabel14.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel14.setText("WALK IN STYLE");
+        jPanel2.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 49, 101, -1));
+
+        menuPanel.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 140, 80));
 
         jPanel1.add(menuPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 160, 600));
 
-        displayPanel.setBackground(new java.awt.Color(255, 255, 240));
+        displayPanel.setBackground(new java.awt.Color(233, 220, 201));
 
         javax.swing.GroupLayout displayPanelLayout = new javax.swing.GroupLayout(displayPanel);
         displayPanel.setLayout(displayPanelLayout);
@@ -305,6 +372,11 @@ public class Home extends javax.swing.JFrame {
 
         jPanel1.add(displayPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 90, 900, 510));
 
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel1.setText("jLabel1");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 20, 490, 60));
+
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -316,18 +388,22 @@ public class Home extends javax.swing.JFrame {
 
     private void suppPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_suppPanelMouseEntered
         setColor(suppPanel);
+        suppliersLabel.setForeground(Color.BLACK);
     }//GEN-LAST:event_suppPanelMouseEntered
 
     private void suppPanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_suppPanelMouseExited
         resetColor(suppPanel);
+        suppliersLabel.setForeground(Color.WHITE);
     }//GEN-LAST:event_suppPanelMouseExited
 
     private void prodPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prodPanelMouseEntered
         setColor(prodPanel);
+        productsLabel.setForeground(Color.BLACK);
     }//GEN-LAST:event_prodPanelMouseEntered
 
     private void prodPanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prodPanelMouseExited
         resetColor(prodPanel);
+        productsLabel.setForeground(Color.WHITE);
     }//GEN-LAST:event_prodPanelMouseExited
 
     private void prodPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prodPanelMousePressed
@@ -336,10 +412,12 @@ public class Home extends javax.swing.JFrame {
 
     private void orderPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_orderPanelMouseEntered
         setColor(orderPanel);
+        orderLabel.setForeground(Color.BLACK);
     }//GEN-LAST:event_orderPanelMouseEntered
 
     private void orderPanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_orderPanelMouseExited
         resetColor(orderPanel);
+        orderLabel.setForeground(Color.WHITE);
     }//GEN-LAST:event_orderPanelMouseExited
 
     private void orderPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_orderPanelMousePressed
@@ -348,10 +426,12 @@ public class Home extends javax.swing.JFrame {
 
     private void purchaseInfoRecordsPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_purchaseInfoRecordsPanelMouseEntered
         setColor(purchaseInfoRecordsPanel);
+        recordsLabel.setForeground(Color.BLACK);
     }//GEN-LAST:event_purchaseInfoRecordsPanelMouseEntered
 
     private void purchaseInfoRecordsPanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_purchaseInfoRecordsPanelMouseExited
         resetColor(purchaseInfoRecordsPanel);
+        recordsLabel.setForeground(Color.WHITE);
     }//GEN-LAST:event_purchaseInfoRecordsPanelMouseExited
 
     private void purchaseInfoRecordsPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_purchaseInfoRecordsPanelMousePressed
@@ -360,59 +440,89 @@ public class Home extends javax.swing.JFrame {
 
     private void usersPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_usersPanelMouseEntered
         setColor(usersPanel);
+        usersLabel.setForeground(Color.BLACK);
     }//GEN-LAST:event_usersPanelMouseEntered
 
     private void usersPanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_usersPanelMouseExited
         resetColor(usersPanel);
+        usersLabel.setForeground(Color.WHITE);
     }//GEN-LAST:event_usersPanelMouseExited
 
     private void usersPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_usersPanelMousePressed
         addUsersFrame();
     }//GEN-LAST:event_usersPanelMousePressed
 
-    private void userLogsPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userLogsPanelMouseEntered
-        setColor(userLogsPanel);
-    }//GEN-LAST:event_userLogsPanelMouseEntered
-
-    private void userLogsPanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userLogsPanelMouseExited
-        resetColor(userLogsPanel);
-    }//GEN-LAST:event_userLogsPanelMouseExited
-
-    private void userLogsPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userLogsPanelMousePressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_userLogsPanelMousePressed
-
-    private void homePanelKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_homePanelKeyPressed
-        addHomeFrame();
-    }//GEN-LAST:event_homePanelKeyPressed
-
     private void homePanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homePanelMouseExited
         resetColor(homePanel);
+        homeLabel.setForeground(Color.WHITE);
     }//GEN-LAST:event_homePanelMouseExited
 
     private void homePanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homePanelMouseEntered
         setColor(homePanel);
+        homeLabel.setForeground(Color.BLACK);
     }//GEN-LAST:event_homePanelMouseEntered
+
+    private void logoutPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutPanelMousePressed
+        int opt = JOptionPane.showConfirmDialog(
+                null,
+                "<html>Are you sure you want to logout?<br>You will have to login again.<html>",
+                "Confirmation",
+                JOptionPane.YES_NO_OPTION);
+        if (opt == JOptionPane.YES_OPTION) {
+            outTime = LocalDateTime.now();
+            user.setOutTime(String.valueOf(outTime));
+            user.setUsername(username);
+            // new Users().addUserLogin(user);
+            dispose();
+            Login logPage = new Login();
+            logPage.setVisible(true);
+        }
+    }//GEN-LAST:event_logoutPanelMousePressed
+
+    private void logoutPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutPanelMouseEntered
+        setColor(logoutPanel);
+        logoutLabel.setForeground(Color.BLACK);
+    }//GEN-LAST:event_logoutPanelMouseEntered
+
+    private void logoutPanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutPanelMouseExited
+        resetColor(logoutPanel);
+        logoutLabel.setForeground(Color.WHITE);
+    }//GEN-LAST:event_logoutPanelMouseExited
+
+    private void homePanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homePanelMousePressed
+        addHomeFrame();
+    }//GEN-LAST:event_homePanelMousePressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JPanel displayPanel;
+    private javax.swing.JLabel homeLabel;
     private javax.swing.JPanel homePanel;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel logoutLabel;
+    private javax.swing.JPanel logoutPanel;
     private javax.swing.JPanel menuPanel;
+    private javax.swing.JLabel orderLabel;
     private javax.swing.JPanel orderPanel;
     private javax.swing.JPanel prodPanel;
+    private javax.swing.JLabel productsLabel;
     private javax.swing.JPanel purchaseInfoRecordsPanel;
+    private javax.swing.JLabel recordsLabel;
     private javax.swing.JPanel suppPanel;
-    private javax.swing.JPanel userLogsPanel;
+    private javax.swing.JLabel suppliersLabel;
+    private javax.swing.JLabel usersLabel;
     private javax.swing.JPanel usersPanel;
     // End of variables declaration//GEN-END:variables
 }
