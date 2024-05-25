@@ -4,8 +4,10 @@
  */
 package UI;
 
+import DA.Prod;
 import DA.Users;
 import DT.UsersDT;
+import java.sql.*;
 
 /**
  *
@@ -20,7 +22,8 @@ public class Welcome extends javax.swing.JPanel {
         initComponents();
         UsersDT user = new UsersDT();
         new Users().getFullName(user, username);
-        welcomeLabel.setText("Welcome,  " + user.getFullName() + ".");
+
+        loadDataSet();
     }
 
     /**
@@ -33,31 +36,81 @@ public class Welcome extends javax.swing.JPanel {
     private void initComponents() {
 
         welcomeLabel = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        freqTable = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        monthlyTable = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
-        welcomeLabel.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        setBackground(new java.awt.Color(233, 220, 201));
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        welcomeLabel.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         welcomeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        welcomeLabel.setText("WELCOME");
+        welcomeLabel.setText("DASHBOARD");
+        add(welcomeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 10, 362, 60));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(195, 195, 195)
-                .addComponent(welcomeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(143, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(145, 145, 145)
-                .addComponent(welcomeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(278, Short.MAX_VALUE))
-        );
+        freqTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3"
+            }
+        ));
+        jScrollPane1.setViewportView(freqTable);
+
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 140, 260, 320));
+
+        monthlyTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3"
+            }
+        ));
+        jScrollPane2.setViewportView(monthlyTable);
+
+        add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 140, 360, 320));
+
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel1.setText("DAILY SALES REPORT");
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 100, 170, 30));
+
+        jLabel2.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel2.setText("MONTHLY SALES REPORT");
+        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 110, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
+    public void loadDataSet() {
+        try {
+            Prod freq = new Prod();
+            String[] customColumnNames = {"Product", "Frequency", "Total Quantity", "new"};
+            freqTable.setDefaultEditor(Object.class, null);
+            freqTable.setModel(freq.buildTableModel(freq.getFreqResult(), customColumnNames));
+            String[] customColumnNames2 = {"Product", "Total Quantity", "Revenue"};
+            monthlyTable.setDefaultEditor(Object.class, null);
+            monthlyTable.setModel(freq.buildTableModel(freq.getFreqResult2(), customColumnNames2));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable freqTable;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable monthlyTable;
     private javax.swing.JLabel welcomeLabel;
     // End of variables declaration//GEN-END:variables
 }

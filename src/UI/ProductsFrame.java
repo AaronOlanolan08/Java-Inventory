@@ -40,7 +40,9 @@ public class ProductsFrame extends javax.swing.JPanel {
     public void loadSearchData(String text) {
         try {
             Prod productDAO = new Prod();
-            productTable.setModel(productDAO.buildTableModel(productDAO.getProductSearch(text)));
+            String[] columnNames = {"Product ID", "Product Name", "Cost Price", "Sell Price", "Brand", "Stock"};
+            productTable.setDefaultEditor(Object.class, null);
+            productTable.setModel(productDAO.buildTableModel(productDAO.getProductSearch(text), columnNames));
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -58,7 +60,9 @@ public class ProductsFrame extends javax.swing.JPanel {
     public void loadDataSet() {
         try {
             Prod productDAO = new Prod();
-            productTable.setModel(productDAO.buildTableModel(productDAO.getQueryResult()));
+            String[] columnNames = {"Product ID", "Product Name", "Cost Price", "Sell Price", "Brand", "Stock"};
+            productTable.setDefaultEditor(Object.class, null);
+            productTable.setModel(productDAO.buildTableModel(productDAO.getQueryResult(), columnNames));
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -80,8 +84,8 @@ public class ProductsFrame extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        quantityField = new javax.swing.JTextField();
         costField = new javax.swing.JTextField();
+        quantityField = new javax.swing.JTextField();
         sellField = new javax.swing.JTextField();
         brandField = new javax.swing.JTextField();
         addButton = new javax.swing.JButton();
@@ -92,7 +96,9 @@ public class ProductsFrame extends javax.swing.JPanel {
         editButton = new javax.swing.JButton();
         searchField = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
 
+        setBackground(new java.awt.Color(233, 220, 201));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         productTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -121,7 +127,7 @@ public class ProductsFrame extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(productTable);
 
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 37, 622, 466));
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-2, 37, 630, 470));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Enter Product Details"));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -134,6 +140,12 @@ public class ProductsFrame extends javax.swing.JPanel {
 
         jLabel2.setText("Product Name:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, -1, -1));
+
+        nameField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                nameFieldKeyTyped(evt);
+            }
+        });
         jPanel1.add(nameField, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, 199, -1));
 
         jLabel3.setText("Cost Price:");
@@ -147,9 +159,33 @@ public class ProductsFrame extends javax.swing.JPanel {
 
         jLabel6.setText("Quantity:");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, -1, -1));
-        jPanel1.add(quantityField, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 200, -1));
+
+        costField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                costFieldKeyTyped(evt);
+            }
+        });
         jPanel1.add(costField, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 210, 200, -1));
+
+        quantityField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                quantityFieldKeyTyped(evt);
+            }
+        });
+        jPanel1.add(quantityField, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 200, -1));
+
+        sellField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                sellFieldKeyTyped(evt);
+            }
+        });
         jPanel1.add(sellField, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, 200, -1));
+
+        brandField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                brandFieldKeyTyped(evt);
+            }
+        });
         jPanel1.add(brandField, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 310, 200, -1));
 
         addButton.setText("Add");
@@ -192,17 +228,25 @@ public class ProductsFrame extends javax.swing.JPanel {
         jScrollPane2.setViewportView(jPanel1);
         jPanel1.getAccessibleContext().setAccessibleParent(this);
 
-        add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(634, 37, 260, 466));
+        add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(624, 37, 280, 470));
 
         searchField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 searchFieldKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                searchFieldKeyTyped(evt);
             }
         });
         add(searchField, new org.netbeans.lib.awtextra.AbsoluteConstraints(497, 9, 131, -1));
 
         jLabel8.setText("Search:");
         add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(453, 12, -1, -1));
+
+        jLabel9.setBackground(new java.awt.Color(50, 57, 61));
+        jLabel9.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel9.setText("PRODUCTS");
+        add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 120, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
@@ -216,17 +260,6 @@ public class ProductsFrame extends javax.swing.JPanel {
             try {
                 ResultSet resultSet = prd.getProdName(nameField.getText());
                 if (resultSet.next()) {
-//                    //productDTO.setProdName(nameText.getText());
-//                    prod.setDate(jDateChooser1.getDate().toString());
-//                    prod.setQuantity(Integer.parseInt(quantityField.getText()) - prd.getStock(nameField.getText()));
-//                    //productDTO.setCostPrice(Double.parseDouble(costText.getText()));
-//                    //productDTO.setSellPrice(Double.parseDouble(sellText.getText()));
-//                    //productDTO.setBrand(brandText.getText());
-//                    Double costPrice = Double.valueOf(costField.getText());
-//                    Double totalCost = costPrice * Integer.valueOf(quantityField.getText());
-//                    prod.setTotalCost(totalCost);
-//                    loadDataSet();
-
                     JOptionPane.showMessageDialog(null, "This product is already added in the inventory.");
 
                 } else {
@@ -392,6 +425,57 @@ public class ProductsFrame extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_editButtonActionPerformed
 
+    private void searchFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchFieldKeyTyped
+        if (searchField.getText().length() >= 45) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_searchFieldKeyTyped
+
+    private void nameFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nameFieldKeyTyped
+        if (nameField.getText().length() >= 45) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_nameFieldKeyTyped
+
+    private void quantityFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_quantityFieldKeyTyped
+        char c = evt.getKeyChar();
+        String text = quantityField.getText();
+
+        // Check if the input character is a digit
+        if (!Character.isDigit(c)) {
+            evt.consume(); // Ignore the event if it's not a digit
+            return;
+        }
+
+        // Limit to 5 characters
+        if (text.length() >= 5) {
+            evt.consume(); // Ignore the event if there are already 5 characters
+            return;
+        }
+    }//GEN-LAST:event_quantityFieldKeyTyped
+
+    private void costFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_costFieldKeyTyped
+        String text = costField.getText() + evt.getKeyChar();
+
+        if (text.length() > 8 || !text.matches("\\d*(\\.\\d{0,2})?")) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_costFieldKeyTyped
+
+    private void sellFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_sellFieldKeyTyped
+        String text = sellField.getText() + evt.getKeyChar();
+
+        if (text.length() > 8 || !text.matches("\\d*(\\.\\d{0,2})?")) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_sellFieldKeyTyped
+
+    private void brandFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_brandFieldKeyTyped
+        if (brandField.getText().length() >= 45) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_brandFieldKeyTyped
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
@@ -408,6 +492,7 @@ public class ProductsFrame extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

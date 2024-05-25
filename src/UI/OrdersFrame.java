@@ -35,7 +35,9 @@ public class OrdersFrame extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         sellPriceField = new javax.swing.JTextField();
         clearButton = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
 
+        setBackground(new java.awt.Color(233, 220, 201));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         prodTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -48,7 +50,20 @@ public class OrdersFrame extends javax.swing.JPanel {
             new String [] {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        prodTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                prodTableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(prodTable);
 
         add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 620, 470));
@@ -56,6 +71,9 @@ public class OrdersFrame extends javax.swing.JPanel {
         searchField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 searchFieldKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                searchFieldKeyTyped(evt);
             }
         });
         add(searchField, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 10, 120, -1));
@@ -71,8 +89,13 @@ public class OrdersFrame extends javax.swing.JPanel {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 nameFieldKeyReleased(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                nameFieldKeyTyped(evt);
+            }
         });
         jPanel1.add(nameField, new org.netbeans.lib.awtextra.AbsoluteConstraints(58, 116, 175, -1));
+
+        jSpinner1.setModel(new javax.swing.SpinnerNumberModel(0, 0, 999, 1));
         jPanel1.add(jSpinner1, new org.netbeans.lib.awtextra.AbsoluteConstraints(58, 252, 175, -1));
         jPanel1.add(jDateChooser1, new org.netbeans.lib.awtextra.AbsoluteConstraints(58, 184, 175, -1));
 
@@ -95,6 +118,13 @@ public class OrdersFrame extends javax.swing.JPanel {
 
         jLabel4.setText("Selling Price:");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(58, 292, 76, -1));
+
+        sellPriceField.setEnabled(false);
+        sellPriceField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                sellPriceFieldKeyTyped(evt);
+            }
+        });
         jPanel1.add(sellPriceField, new org.netbeans.lib.awtextra.AbsoluteConstraints(58, 326, 175, -1));
 
         clearButton.setText("Clear");
@@ -106,6 +136,11 @@ public class OrdersFrame extends javax.swing.JPanel {
         jPanel1.add(clearButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 380, 63, -1));
 
         add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 40, 280, 470));
+
+        jLabel6.setBackground(new java.awt.Color(50, 57, 61));
+        jLabel6.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel6.setText("ORDERS");
+        add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 90, 30));
     }// </editor-fold>//GEN-END:initComponents
 
     private void buyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyButtonActionPerformed
@@ -130,6 +165,7 @@ public class OrdersFrame extends javax.swing.JPanel {
                     prod.setQuantity(quantity);
                     prd.buyProductDAO(prod, uid);
                     loadDataSet();
+                    clear();
                 } else {
                     JOptionPane.showMessageDialog(this, "This product does not exist.");
                 }
@@ -155,20 +191,67 @@ public class OrdersFrame extends javax.swing.JPanel {
     }//GEN-LAST:event_nameFieldKeyReleased
 
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
-        nameField.setText("");
-        jDateChooser1.setDate(null);
-        jSpinner1.setValue(0);
-        sellPriceField.setText("");
+        clear();
     }//GEN-LAST:event_clearButtonActionPerformed
 
     private void searchFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchFieldKeyReleased
         loadSearchData(searchField.getText());
     }//GEN-LAST:event_searchFieldKeyReleased
 
+    private boolean tableClicked = false;
+    private void prodTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prodTableMouseClicked
+        if (!tableClicked) { // Check if the table click event is enabled
+            int row = prodTable.getSelectedRow();
+            int col = prodTable.getColumnCount();
+            Object[] data = new Object[col];
+
+            for (int i = 0; i < col; i++) {
+                data[i] = prodTable.getValueAt(row, i);
+            }
+
+            nameField.setText((String) data[1]);
+            Double sellValue = (Double) data[3];
+            sellPriceField.setText(String.valueOf(sellValue));
+
+        } else {
+            prodTable.clearSelection();
+            clear();
+        }
+
+        tableClicked = !tableClicked;
+    }//GEN-LAST:event_prodTableMouseClicked
+
+    private void searchFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchFieldKeyTyped
+        if (searchField.getText().length() >= 45) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_searchFieldKeyTyped
+
+    private void nameFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nameFieldKeyTyped
+        if (nameField.getText().length() >= 45) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_nameFieldKeyTyped
+
+    private void sellPriceFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_sellPriceFieldKeyTyped
+        if (sellPriceField.getText().length() >= 99999) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_sellPriceFieldKeyTyped
+
+    public void clear() {
+        nameField.setText("");
+        jDateChooser1.setDate(null);
+        jSpinner1.setValue(0);
+        sellPriceField.setText("");
+    }
+
     public void loadDataSet() {
         try {
             Prod productDAO = new Prod();
-            prodTable.setModel(productDAO.buildTableModel(productDAO.getQueryResult()));
+            String[] columnNames = {"Product ID", "Product Name", "Cost Price", "Sell Price", "Brand", "Stock"};
+            prodTable.setDefaultEditor(Object.class, null);
+            prodTable.setModel(productDAO.buildTableModel(productDAO.getQueryResult(), columnNames));
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -177,7 +260,9 @@ public class OrdersFrame extends javax.swing.JPanel {
     public void loadSearchData(String text) {
         try {
             Prod productDAO = new Prod();
-            prodTable.setModel(productDAO.buildTableModel(productDAO.getProductSearch(text)));
+            String[] columnNames = {"Product ID", "Product Name", "Cost Price", "Sell Price", "Brand", "Stock"};
+            prodTable.setDefaultEditor(Object.class, null);
+            prodTable.setModel(productDAO.buildTableModel(productDAO.getProductSearch(text), columnNames));
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -193,6 +278,7 @@ public class OrdersFrame extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSpinner jSpinner1;

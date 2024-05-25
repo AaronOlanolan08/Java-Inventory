@@ -5,12 +5,17 @@
 package UI;
 
 import DA.Prod;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.*;
 import javax.swing.JOptionPane;
 
 public class PRecordsFrame extends javax.swing.JPanel {
 
     Home home;
+    private static final String DELETED_RECORDS_FILE = "deleted_records.txt";
+
     public PRecordsFrame(Home home) {
         initComponents();
         this.home = home;
@@ -32,7 +37,10 @@ public class PRecordsFrame extends javax.swing.JPanel {
         salesButton = new javax.swing.JButton();
         searchField = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        refreshButton = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
+        setBackground(new java.awt.Color(233, 220, 201));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         pRecordsTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -69,17 +77,33 @@ public class PRecordsFrame extends javax.swing.JPanel {
                 salesButtonActionPerformed(evt);
             }
         });
-        add(salesButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 70, -1, -1));
+        add(salesButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 70, -1, -1));
 
         searchField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 searchFieldKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                searchFieldKeyTyped(evt);
             }
         });
         add(searchField, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 70, 110, -1));
 
         jLabel1.setText("Search:");
         add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 70, -1, 20));
+
+        refreshButton.setText("Refresh");
+        refreshButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshButtonActionPerformed(evt);
+            }
+        });
+        add(refreshButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 70, -1, -1));
+
+        jLabel2.setBackground(new java.awt.Color(50, 57, 61));
+        jLabel2.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel2.setText("PURCHASE RECORDS");
+        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 210, 30));
     }// </editor-fold>//GEN-END:initComponents
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
@@ -93,20 +117,28 @@ public class PRecordsFrame extends javax.swing.JPanel {
                     "Confirmation",
                     JOptionPane.YES_NO_OPTION);
             if (opt == JOptionPane.YES_OPTION) {
+                backupDeletedRow(pRecordsTable.getSelectedRow());
                 delrecord.deletePurchaseDAO((int) pRecordsTable.getValueAt(pRecordsTable.getSelectedRow(), 0));
-                // new ProductDAO().editPurchaseStock(prodCode, quantity);
                 loadDataSet();
             }
         }
     }//GEN-LAST:event_deleteButtonActionPerformed
-
+    private boolean tableClicked = false;
     private void pRecordsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pRecordsTableMouseClicked
-        int row = pRecordsTable.getSelectedRow();
-        int col = pRecordsTable.getColumnCount();
-        Object[] data = new Object[col];
+        if (!tableClicked) { // Check if the table click event is enabled
+            int row = pRecordsTable.getSelectedRow();
+            int col = pRecordsTable.getColumnCount();
+            Object[] data = new Object[col];
 
-        for (int i = 0; i < col; i++)
-            data[i] = pRecordsTable.getValueAt(row, i);
+            for (int i = 0; i < col; i++) {
+                data[i] = pRecordsTable.getValueAt(row, i);
+            }
+
+        } else {
+            pRecordsTable.clearSelection();
+        }
+
+        tableClicked = !tableClicked;
     }//GEN-LAST:event_pRecordsTableMouseClicked
 
     private void salesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salesButtonActionPerformed
@@ -117,10 +149,22 @@ public class PRecordsFrame extends javax.swing.JPanel {
         loadSearchData(searchField.getText());
     }//GEN-LAST:event_searchFieldKeyReleased
 
+    private void searchFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchFieldKeyTyped
+        if (searchField.getText().length() >= 45) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_searchFieldKeyTyped
+
+    private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed
+        loadDataSet();
+    }//GEN-LAST:event_refreshButtonActionPerformed
+
     public void loadDataSet() {
         try {
             Prod purchase = new Prod();
-            pRecordsTable.setModel(purchase.buildTableModel(purchase.getPurchaseInfo()));
+            String[] columnNames = {"Purchase ID", "Product Name", "Supplier", "Date", "Quantity", "Total Cost"};
+            pRecordsTable.setDefaultEditor(Object.class, null);
+            pRecordsTable.setModel(purchase.buildTableModel(purchase.getPurchaseInfo(), columnNames));
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -129,17 +173,43 @@ public class PRecordsFrame extends javax.swing.JPanel {
     public void loadSearchData(String text) {
         try {
             Prod productDAO = new Prod();
-             pRecordsTable.setModel(productDAO.buildTableModel(productDAO.getPurchaseSearch(text)));
+            String[] columnNames = {"Purchase ID", "Product Name", "Supplier", "Date", "Quantity", "Total Cost"};
+            pRecordsTable.setDefaultEditor(Object.class, null);
+            pRecordsTable.setModel(productDAO.buildTableModel(productDAO.getPurchaseSearch(text), columnNames));
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    private void backupDeletedRow(int selectedRow) {
+        int columnCount = pRecordsTable.getColumnCount();
+        Object[] row = new Object[columnCount];
+        for (int i = 0; i < columnCount; i++) {
+            row[i] = pRecordsTable.getValueAt(selectedRow, i);
+        }
+        // Save the row to the file
+        saveDeletedRowToFile(row);
+    }
+
+    private void saveDeletedRowToFile(Object[] row) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(DELETED_RECORDS_FILE, true))) {
+            StringBuilder sb = new StringBuilder();
+            for (Object value : row) {
+                sb.append(value).append("\t");
+            }
+            writer.write(sb.toString().trim());
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton deleteButton;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable pRecordsTable;
+    private javax.swing.JButton refreshButton;
     private javax.swing.JButton salesButton;
     private javax.swing.JTextField searchField;
     // End of variables declaration//GEN-END:variables

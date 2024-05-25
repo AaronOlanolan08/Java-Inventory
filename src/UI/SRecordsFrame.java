@@ -5,6 +5,9 @@
 package UI;
 
 import DA.Prod;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.*;
 import javax.swing.JOptionPane;
 
@@ -15,6 +18,7 @@ import javax.swing.JOptionPane;
 public class SRecordsFrame extends javax.swing.JPanel {
 
     Home home;
+    private static final String DELETED_RECORDS_FILE = "deleted_sales_records.txt";
 
     public SRecordsFrame(Home home) {
         initComponents();
@@ -37,7 +41,10 @@ public class SRecordsFrame extends javax.swing.JPanel {
         deleteButton = new javax.swing.JButton();
         searchField = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        refreshButton = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
+        setBackground(new java.awt.Color(233, 220, 201));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         sRecordsTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -51,6 +58,11 @@ public class SRecordsFrame extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        sRecordsTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                sRecordsTableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(sRecordsTable);
 
         add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 98, 888, 406));
@@ -61,7 +73,7 @@ public class SRecordsFrame extends javax.swing.JPanel {
                 purchaseButtonActionPerformed(evt);
             }
         });
-        add(purchaseButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(771, 69, -1, -1));
+        add(purchaseButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 70, -1, -1));
 
         deleteButton.setText("Delete");
         deleteButton.addActionListener(new java.awt.event.ActionListener() {
@@ -75,11 +87,27 @@ public class SRecordsFrame extends javax.swing.JPanel {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 searchFieldKeyReleased(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                searchFieldKeyTyped(evt);
+            }
         });
         add(searchField, new org.netbeans.lib.awtextra.AbsoluteConstraints(329, 69, 111, -1));
 
         jLabel1.setText("Search:");
         add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(285, 69, -1, 23));
+
+        refreshButton.setText("Refresh");
+        refreshButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshButtonActionPerformed(evt);
+            }
+        });
+        add(refreshButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 70, -1, -1));
+
+        jLabel2.setBackground(new java.awt.Color(50, 57, 61));
+        jLabel2.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel2.setText("SALES RECORDS");
+        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void purchaseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_purchaseButtonActionPerformed
@@ -97,10 +125,9 @@ public class SRecordsFrame extends javax.swing.JPanel {
                     "Confirmation",
                     JOptionPane.YES_NO_OPTION);
             if (opt == JOptionPane.YES_OPTION) {
+                backupDeletedRow(sRecordsTable.getSelectedRow());
                 delrecord.deleteSaleDAO(Integer.parseInt(
                         sRecordsTable.getValueAt(sRecordsTable.getSelectedRow(), 0).toString()));
-//                new ProductDAO().editSoldStock(
-//                        salesTable.getValueAt(salesTable.getSelectedRow(), 1).toString(), quantity);
                 loadDataSet();
             }
         }
@@ -109,12 +136,40 @@ public class SRecordsFrame extends javax.swing.JPanel {
     private void searchFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchFieldKeyReleased
         loadSearchData(searchField.getText());
     }//GEN-LAST:event_searchFieldKeyReleased
+    private boolean tableClicked = false;
+    private void sRecordsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sRecordsTableMouseClicked
+        if (!tableClicked) { // Check if the table click event is enabled
+            int row = sRecordsTable.getSelectedRow();
+            int col = sRecordsTable.getColumnCount();
+            Object[] data = new Object[col];
 
+            for (int i = 0; i < col; i++) {
+                data[i] = sRecordsTable.getValueAt(row, i);
+            }
+
+        } else {
+            sRecordsTable.clearSelection();
+        }
+
+        tableClicked = !tableClicked;
+    }//GEN-LAST:event_sRecordsTableMouseClicked
+
+    private void searchFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchFieldKeyTyped
+        if (searchField.getText().length() >= 45) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_searchFieldKeyTyped
+
+    private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed
+        loadDataSet();
+    }//GEN-LAST:event_refreshButtonActionPerformed
 
     public void loadDataSet() {
         try {
             Prod productDAO = new Prod();
-            sRecordsTable.setModel(productDAO.buildTableModel(productDAO.getSalesInfo()));
+            String[] columnNames = {"Sales ID", "Product Name", "Seller", "Date", "Quantity", "Revenue"};
+            sRecordsTable.setDefaultEditor(Object.class, null);
+            sRecordsTable.setModel(productDAO.buildTableModel(productDAO.getSalesInfo(), columnNames));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -124,8 +179,33 @@ public class SRecordsFrame extends javax.swing.JPanel {
     public void loadSearchData(String text) {
         try {
             Prod productDAO = new Prod();
-            sRecordsTable.setModel(productDAO.buildTableModel(productDAO.getSalesSearch(text)));
+            String[] columnNames = {"Product ID", "Product Name", "Seller", "Date", "Quantity", "Revenue"};
+            sRecordsTable.setDefaultEditor(Object.class, null);
+            sRecordsTable.setModel(productDAO.buildTableModel(productDAO.getSalesSearch(text), columnNames));
         } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void backupDeletedRow(int selectedRow) {
+        int columnCount = sRecordsTable.getColumnCount();
+        Object[] row = new Object[columnCount];
+        for (int i = 0; i < columnCount; i++) {
+            row[i] = sRecordsTable.getValueAt(selectedRow, i);
+        }
+        // Save the row to the file
+        saveDeletedRowToFile(row);
+    }
+
+    private void saveDeletedRowToFile(Object[] row) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(DELETED_RECORDS_FILE, true))) {
+            StringBuilder sb = new StringBuilder();
+            for (Object value : row) {
+                sb.append(value).append("\t");
+            }
+            writer.write(sb.toString().trim());
+            writer.newLine();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -133,8 +213,10 @@ public class SRecordsFrame extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton deleteButton;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton purchaseButton;
+    private javax.swing.JButton refreshButton;
     private javax.swing.JTable sRecordsTable;
     private javax.swing.JTextField searchField;
     // End of variables declaration//GEN-END:variables

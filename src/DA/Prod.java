@@ -43,16 +43,6 @@ public class Prod {
         return resultSet;
     }
 
-    public ResultSet getCustomers() {
-        try {
-            String query = "SELECT * FROM customers";
-            resultSet = statement.executeQuery(query);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return resultSet;
-    }
-
     public ResultSet getProdStock() {
         try {
             String query = "SELECT * FROM currentstock";
@@ -291,17 +281,6 @@ public class Prod {
         }
     }
 
-    public void deleteStock() {
-        try {
-            String query = "DELETE FROM currentstock WHERE productcode NOT IN(SELECT productcode FROM purchaseinfo)";
-            String query2 = "DELETE FROM salesinfo WHERE productcode NOT IN(SELECT productcode FROM products)";
-            statement.executeUpdate(query);
-            statement.executeUpdate(query2);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-    }
-
     // Method to permanently delete a product from inventory
     public void deleteProductDAO(String code) {
         try {
@@ -348,7 +327,7 @@ public class Prod {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        deleteStock();
+        //deleteStock();
     }
 
     // Sales transaction handling
@@ -386,7 +365,8 @@ public class Prod {
     // Products data set retrieval for display
     public ResultSet getQueryResult() {
         try {
-            String query = "SELECT productID,productname,costprice,sellprice,brand,stock FROM products";
+            String query = "SELECT productID,productname,costprice,sellprice,brand,stock FROM products "
+                    + "ORDER BY productID DESC";
             resultSet = statement.executeQuery(query);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -399,7 +379,7 @@ public class Prod {
         try {
             String query = "SELECT purchaseID,products.productname,suppliers.fullname,date,quantity,totalcost "
                     + "FROM purchaseinfo INNER JOIN products ON purchaseinfo.productID=products.productID "
-                    + "INNER JOIN suppliers ON purchaseinfo.supplierID=suppliers.supplierID ORDER BY purchaseID";
+                    + "INNER JOIN suppliers ON purchaseinfo.supplierID=suppliers.supplierID ORDER BY purchaseID DESC";
 
             resultSet = statement.executeQuery(query);
         } catch (SQLException throwables) {
@@ -432,7 +412,7 @@ public class Prod {
                     date,quantity,revenue FROM salesinfo INNER JOIN products
                     ON salesinfo.productID=products.productID
                     INNER JOIN users
-                    ON salesinfo.sellerID=users.userID;
+                    ON salesinfo.sellerID=users.userID ORDER BY salesID DESC
                     """;
             resultSet = statement.executeQuery(query);
         } catch (SQLException throwables) {
@@ -444,7 +424,7 @@ public class Prod {
     // Search method for products
     public ResultSet getProductSearch(String text) {
         try {
-            String query = "SELECT productID,productname,costprice,sellprice,brand FROM products "
+            String query = "SELECT productID,productname,costprice,sellprice,stock FROM products "
                     + "WHERE productID LIKE '%" + text + "%' OR productname LIKE '%" + text + "%' OR brand LIKE '%" + text + "%'";
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
@@ -464,20 +444,13 @@ public class Prod {
         return resultSet;
     }
 
-    String query = """
-                    SELECT salesID,products.productname,users.name,
-                    date,quantity,revenue FROM salesinfo INNER JOIN products
-                    ON salesinfo.productID=products.productID
-                    INNER JOIN users ON salesinfo.sellerID=users.userID WHERE ;
-                    """;
-
     public ResultSet getSalesSearch(String text) {
         try {
             String query = "SELECT salesID,products.productname,users.name,date,quantity,revenue "
                     + "FROM salesinfo INNER JOIN products ON salesinfo.productID=products.productID "
                     + "INNER JOIN users ON salesinfo.sellerID=users.userID "
-                    + "WHERE purchaseID LIKE '%" + text + "%' OR productname LIKE '%" + text + "%' "
-                    + "OR users.name LIKE '%" + text + "%' OR date LIKE '%" + text + "%' ORDER BY salesid;";
+                    + "WHERE salesID LIKE '%" + text + "%' OR products.productname LIKE '%" + text + "%' "
+                    + "OR users.name LIKE '%" + text + "%' OR date LIKE '%" + text + "%' ORDER BY salesID DESC";
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -490,10 +463,10 @@ public class Prod {
         try {
             String query = "SELECT purchaseID,products.productname,suppliers.fullname,date,quantity,totalcost "
                     + "FROM purchaseinfo INNER JOIN products ON purchaseinfo.productID=products.productID "
-                    + "INNER JOIN suppliers ON purchaseinfo.supplierID=suppliers.supplierID"
-                    + "WHERE purchaseID LIKE '%" + text + "%' OR productname LIKE '%" + text + "%' "
+                    + "INNER JOIN suppliers ON purchaseinfo.supplierID=suppliers.supplierID "
+                    + "WHERE purchaseID LIKE '%" + text + "%' OR products.productname LIKE '%" + text + "%' "
                     + "OR suppliers.fullname LIKE '%" + text + "%' "
-                    + "OR date LIKE '%" + text + "%' ORDER BY purchaseID";
+                    + "OR date LIKE '%" + text + "%' ORDER BY purchaseID DESC";
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -554,19 +527,54 @@ public class Prod {
         return date;
     }
 
+    public ResultSet getFreqResult() {
+        try {
+            String query = "SELECT p.productName, \n"
+                    + "       SUM(s.quantity) AS total_quantity, \n"
+                    + "       SUM(s.revenue) AS total_revenue\n"
+                    + "FROM products p\n"
+                    + "LEFT JOIN salesinfo s ON p.productID = s.productID\n"
+                    + "WHERE DATE(STR_TO_DATE(s.date, '%a %b %e %H:%i:%s CST %Y')) = CURDATE()\n"
+                    + "GROUP BY p.productName;";
+            resultSet = statement.executeQuery(query);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return resultSet;
+    }
+
+    public ResultSet getFreqResult2() {
+        try {
+            String query = "SELECT \n"
+                    + "    p.productName,\n"
+                    + "    SUM(s.quantity) AS total_quantity,\n"
+                    + "    SUM(s.revenue) AS total_revenue\n"
+                    + "FROM \n"
+                    + "    products p\n"
+                    + "LEFT JOIN \n"
+                    + "    salesinfo s ON p.productID = s.productID\n"
+                    + "GROUP BY \n"
+                    + "    p.productName;";
+            resultSet = statement.executeQuery(query);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return resultSet;
+    }
+
     // Method to display product-related data set in tabular form
-    public DefaultTableModel buildTableModel(ResultSet resultSet) throws SQLException {
+    public DefaultTableModel buildTableModel(ResultSet resultSet, String[] customColumnNames) throws SQLException {
         ResultSetMetaData metaData = resultSet.getMetaData();
-        Vector<String> columnNames = new Vector<String>();
         int colCount = metaData.getColumnCount();
 
+        Vector<String> columnNames = new Vector<>();
         for (int col = 1; col <= colCount; col++) {
-            columnNames.add(metaData.getColumnName(col).toUpperCase(Locale.ROOT));
+            columnNames.add(customColumnNames[col - 1]); // Use custom column names provided
         }
 
-        Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+        Vector<Vector<Object>> data = new Vector<>();
         while (resultSet.next()) {
-            Vector<Object> vector = new Vector<Object>();
+            Vector<Object> vector = new Vector<>();
             for (int col = 1; col <= colCount; col++) {
                 vector.add(resultSet.getObject(col));
             }
@@ -574,4 +582,5 @@ public class Prod {
         }
         return new DefaultTableModel(data, columnNames);
     }
+
 }

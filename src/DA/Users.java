@@ -28,18 +28,29 @@ public class Users {
 
     public void addUserDAO(UsersDT userDTO) {
         try {
-            String query = "SELECT * FROM users WHERE name='"
-                    + userDTO.getFullName()
-                    + "' AND location='"
-                    + userDTO.getLocation()
-                    + "' AND contact='"
-                    + userDTO.getPhone()
-                    + "'";
-            resultSet = statement.executeQuery(query);
+            String username = userDTO.getUsername();
+
+            // Check if the username already exists
+            String usernameQuery = "SELECT * FROM users WHERE username='" + username + "'";
+            resultSet = statement.executeQuery(usernameQuery);
+
             if (resultSet.next()) {
-                JOptionPane.showMessageDialog(null, "User already exists");
+                JOptionPane.showMessageDialog(null, "Username already exists");
             } else {
-                addFunction(userDTO);
+                // Check if the user with the same details already exists
+                String query = "SELECT * FROM users WHERE name='"
+                        + userDTO.getFullName()
+                        + "' AND location='"
+                        + userDTO.getLocation()
+                        + "' AND contact='"
+                        + userDTO.getPhone()
+                        + "'";
+                resultSet = statement.executeQuery(query);
+                if (resultSet.next()) {
+                    JOptionPane.showMessageDialog(null, "User already exists");
+                } else {
+                    addFunction(userDTO);
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -80,38 +91,27 @@ public class Users {
     public void editUserDAO(UsersDT userDTO) {
 
         try {
-            String query = "UPDATE users SET name=?,location=?,contact=? WHERE username=?";
+            String query = "UPDATE users SET name=?,location=?,contact=? WHERE username=? "
+                    + "AND password=?";
             prepStatement = conn.prepareStatement(query);
             prepStatement.setString(1, userDTO.getFullName());
             prepStatement.setString(2, userDTO.getLocation());
             prepStatement.setString(3, userDTO.getPhone());
             prepStatement.setString(4, userDTO.getUsername());
+            prepStatement.setString(5, userDTO.getPassword());
             prepStatement.executeUpdate();
             JOptionPane.showMessageDialog(null, "Updated Successfully.");
 
         } catch (SQLException throwables) {
+            JOptionPane.showMessageDialog(null, "Username and password don't match.");
             throwables.printStackTrace();
         }
-    }
-
-    // Method to delete existing user
-    public void deleteUserDAO(String username) {
-        try {
-            String query = "DELETE FROM users WHERE username=?";
-            prepStatement = (PreparedStatement) conn.prepareStatement(query);
-            prepStatement.setString(1, username);
-            prepStatement.executeUpdate();
-            JOptionPane.showMessageDialog(null, "User Deleted.");
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-         new UsersFrame().loadDataSet();
     }
 
     // Method to retrieve data set to display in table
     public ResultSet getQueryResult() {
         try {
-            String query = "SELECT * FROM users";
+            String query = "SELECT userID,name,location,contact,username FROM users";
             resultSet = statement.executeQuery(query);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -143,36 +143,37 @@ public class Users {
         }
     }
 
-//    public ResultSet getUserLogsDAO() {
-//        try {
-//            String query = "SELECT users.name,userlogs.username,in_time,out_time,location FROM userlogs"
-//                    + " INNER JOIN users on userlogs.username=users.username";
-//            resultSet = statement.executeQuery(query);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return resultSet;
-//    }
+    public ResultSet getUserLogsDAO() {
+        try {
+            String query = "SELECT logID,users.name,in_time,out_time FROM userlogs"
+                    + " INNER JOIN users on userlogs.id=users.userID "
+                    + "ORDER BY logID DESC";
+            resultSet = statement.executeQuery(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultSet;
+    }
 
-//    public void addUserLogin(UsersDT userDTO) {
-//        try {
-//            // Query to insert a row into the userlogs table
-//            String query = "INSERT INTO userlogs (id, in_time, out_time) VALUES (?, ?, ?, ?)";
-//            PreparedStatement prepStatement = conn.prepareStatement(query);
-//
-//            // Assuming getUserID() returns the user ID from the users table
-//            int userID = getUserID(String.valueOf(userDTO.getUsername()));
-//
-//            // Set the user ID obtained from UsersDT object
-//            prepStatement.setInt(1, userID);
-//            prepStatement.setString(3, userDTO.getInTime());
-//            prepStatement.setString(4, userDTO.getOutTime());
-//
-//            prepStatement.executeUpdate();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    public void addUserLogin(UsersDT userDTO) {
+        try {
+            // Query to insert a row into the userlogs table
+            String query = "INSERT INTO userlogs (id, in_time, out_time) VALUES (?, ?, ?)";
+            PreparedStatement prepStatement = conn.prepareStatement(query);
+
+            // Assuming getUserID() returns the user ID from the users table
+            int userID = getUserID(String.valueOf(userDTO.getUsername()));
+
+            // Set the user ID obtained from UsersDT object
+            prepStatement.setInt(1, userID);
+            prepStatement.setString(2, userDTO.getInTime());
+            prepStatement.setString(3, userDTO.getOutTime());
+
+            prepStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public int getUserID(String username) {
         int userID = -1; // Default value if no user is found or error occurs
@@ -191,7 +192,9 @@ public class Users {
         return userID;
     }
 
-    public ResultSet getPassDAO(String username, String password) {
+    String password;
+
+    public String getPassDAO(String username, String password) {
         try {
             String query = "SELECT password FROM users WHERE username='"
                     + username
@@ -199,18 +202,22 @@ public class Users {
                     + password
                     + "'";
             resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                this.password = resultSet.getString("password");
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return resultSet;
+        return this.password;
     }
 
-    public void changePass(String username, String password) {
+    public void changePass(String username, String password, String newpass) {
         try {
-            String query = "UPDATE users SET password=? WHERE username='" + username + "'";
+            String query = "UPDATE users SET password=? WHERE username=? AND password=?";
             prepStatement = (PreparedStatement) conn.prepareStatement(query);
-            prepStatement.setString(1, password);
+            prepStatement.setString(1, newpass);
             prepStatement.setString(2, username);
+            prepStatement.setString(3, password);
             prepStatement.executeUpdate();
             JOptionPane.showMessageDialog(null, "Password has been changed.");
         } catch (SQLException ex) {
@@ -218,19 +225,59 @@ public class Users {
         }
     }
 
+    public ResultSet getUserSearch(String searchText) {
+        try {
+            String query = "SELECT userID,name,location,contact,username FROM users "
+                    + "WHERE userID LIKE '%" + searchText + "%' OR name LIKE '%" + searchText + "%' "
+                    + "OR location LIKE '%" + searchText + "%' OR contact LIKE '%" + searchText + "%' "
+                    + "OR username LIKE '%" + searchText + "%' ORDER BY userID DESC";
+            resultSet = statement.executeQuery(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultSet;
+    }
+
+    public ResultSet getLogsSearch(String searchText) {
+        try {
+            String query = "SELECT logID,users.name,in_time,out_time FROM userlogs "
+                    + "INNER JOIN users on userlogs.id=users.userID "
+                    + "WHERE logID LIKE '%" + searchText + "%' OR users.name LIKE '%" + searchText + "%' "
+                    + "OR in_time LIKE '%" + searchText + "%' OR out_time LIKE '%" + searchText + "%' "
+                    + "ORDER BY logID DESC";
+            resultSet = statement.executeQuery(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultSet;
+    }
+
+    public void deleteLogDAO(int ID) {
+        try {
+            String query = "DELETE FROM userlogs WHERE logID=?";
+            prepStatement = conn.prepareStatement(query);
+            prepStatement.setInt(1, ID);
+            prepStatement.executeUpdate();
+
+            JOptionPane.showMessageDialog(null, "Transaction has been removed.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     // Method to display data set in tabular form
-    public DefaultTableModel buildTableModel(ResultSet resultSet) throws SQLException {
+    public DefaultTableModel buildTableModel(ResultSet resultSet, String[] customColumnNames) throws SQLException {
         ResultSetMetaData metaData = resultSet.getMetaData();
-        Vector<String> columnNames = new Vector<String>();
         int colCount = metaData.getColumnCount();
 
+        Vector<String> columnNames = new Vector<>();
         for (int col = 1; col <= colCount; col++) {
-            columnNames.add(metaData.getColumnName(col).toUpperCase(Locale.ROOT));
+            columnNames.add(customColumnNames[col - 1]); // Use custom column names provided
         }
 
-        Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+        Vector<Vector<Object>> data = new Vector<>();
         while (resultSet.next()) {
-            Vector<Object> vector = new Vector<Object>();
+            Vector<Object> vector = new Vector<>();
             for (int col = 1; col <= colCount; col++) {
                 vector.add(resultSet.getObject(col));
             }
